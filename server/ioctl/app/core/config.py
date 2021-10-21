@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
     # 60 minunutes * 24 hours * 8 days = 8 days
-    ACCESS_TOKEN_EXPIRE_MINUETS = 60 * 24 * 8
+    ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 8
     SERVER_NAME = str
     SERVER_HOST = AnyHttpUrl
     # bACKEND_CORS_ORIGINS is a JSON-formatted list of origins
@@ -23,7 +23,7 @@ class Settings(BaseSettings):
         elif isinstance(v, (list, str)):
             return v
         raise ValueError(v)
-    
+
     PROJECT_NAME: str
     # SENTRY_DSN: Optional[HttpUrl] = None
 
@@ -62,15 +62,15 @@ class Settings(BaseSettings):
     @validator("EMAILS_FROM_NAME")
     def get_project_name(cls, v: Optional[str], values: Dict[str, Any]) -> str:
         if not v:
-            return values ["PROJECT_NAME"]
+            return values["PROJECT_NAME"]
         return v
 
     EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
     EMAIL_TEMPLATES_DIR: str = "/app/app/email-templates/build"
-    EMAILS_ENSBLED: bool = False
+    EMAILS_ENABLED: bool = False
 
-    @validator("EMAILS_ENSBLED", pre=True)
-    def get_emails_enabled(cls, v: bool, values: Dict[str, Any])-> bool:
+    @validator("EMAILS_ENABLED", pre=True)
+    def get_emails_enabled(cls, v: bool, values: Dict[str, Any]) -> bool:
         return bool(
             values.get("SMTP_HOST")
             and values.get("SMTP_PORT")
