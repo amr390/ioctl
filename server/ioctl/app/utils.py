@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 import emails
-from email_templates import JinjaTemplate
+from emails.template import JinjaTemplate
 from jose import jwt
 
 from app.core.config import settings
@@ -33,7 +33,7 @@ def send_email(
     logging.info(f"send email result: {response}")
 
 
-def send_test_email(email_to:str) -> None:
+def send_test_email(email_to: str) -> None:
     project_name = settings.PROJECT_NAME
     subject = f"{project_name} - Test email"
     with open(Path(settings.EMAIL_TEMPLATES_DIR) / "test_email.html") as f:
