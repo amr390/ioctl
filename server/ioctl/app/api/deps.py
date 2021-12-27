@@ -19,7 +19,6 @@ reusable_oauth2 = OAuth2PasswordBearer(
 
 def get_db() -> Generator:
     try:
-        __import__('pdb').set_trace()
         db = SessionLocal()
         yield db
     finally:
