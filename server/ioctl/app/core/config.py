@@ -14,7 +14,21 @@ class Settings(BaseSettings):
     # bACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g.: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
     # http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl]
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = [
+        "http://localhost",
+        "http://localhost:4200",
+        "http://localhost:3000",
+        "http://localhost:8080",
+        "https://localhost",
+        "https://localhost:4200",
+        "https://localhost:3000",
+        "https://localhost:8080",
+        "http://dev.ioctl.com",
+        "https://stag.ioctl.com",
+        "https://ioctl.com",
+        "http://localhost.dockertoolbox.tiangolo.com",
+        "http://localhost.tiangolo.com"
+    ]
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
@@ -33,10 +47,10 @@ class Settings(BaseSettings):
     #         return None
     #     return v
 
-    POSTGRES_SERVER: str
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str
-    POSTGRES_DB: str
+    POSTGRES_SERVER: str = "localhost"
+    POSTGRES_USER: str = "app_user"
+    POSTGRES_PASSWORD: str = "the_app_user"
+    POSTGRES_DB: str = "ioctl"
     SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
 
     @validator("SQLALCHEMY_DATABASE_URI", pre=True)
@@ -78,8 +92,8 @@ class Settings(BaseSettings):
         )
 
     EMAIL_TEST_USER: EmailStr = "test@example.com"
-    FIRST_SUPERUSER: EmailStr
-    FIRST_SUPERUSER_PASSWORD: str
+    FIRST_SUPERUSER: EmailStr = "admin@ioctl.com"
+    FIRST_SUPERUSER_PASSWORD: str = "changethis"
     USERS_OPEN_REGISTRATION: bool = False
 
     class Config:
