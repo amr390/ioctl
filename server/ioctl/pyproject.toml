@@ -31,10 +31,7 @@ flake8 = "^3.7.9"
 mypy = "^0.770"
 pytest = "^5.4.1"
 pytest-cov = "^2.8.1"
-python-dotenv = "0.19.1"
 sqlalchemy-stubs = "^0.3"
-
-[tool.poetry.group.dev.dependencies]
 python-dotenv = "^0.21.0"
 
 [build-system]
