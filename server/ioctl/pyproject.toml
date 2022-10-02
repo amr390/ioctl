@@ -15,7 +15,7 @@ fastapi = "^0.70"
 jinja2 = "^2.11.2"
 passlib = {extras = ["bcrypt"], version = "^1.7.2"}
 psycopg2-binary = "^2.8.5"
-pydantic = "^1.4"
+pydantic = {extras = ["email"], version = "^1.10.2"}
 python-jose = {extras = ["cryptography"], version = "^3.1.0"}
 python-multipart = "^0.0.5"
 pytest = "^5.4.1"
@@ -31,10 +31,7 @@ flake8 = "^3.7.9"
 mypy = "^0.770"
 pytest = "^5.4.1"
 pytest-cov = "^2.8.1"
-python-dotenv = "0.19.1"
 sqlalchemy-stubs = "^0.3"
-
-[tool.poetry.group.dev.dependencies]
 python-dotenv = "^0.21.0"
 
 [build-system]
