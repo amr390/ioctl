@@ -14,7 +14,7 @@ export const Layout = (props: PropsWithChildren<Props>) => {
       className='bg-cover bg-center bg-no-repeat bg-gradient-to-b from-green-100 to-green-50'
       style={{
         minHeight: '100vh',
-        backgroundImage: "url('/img/bkn-image.jpg')",
+        backgroundImage: "url('/img/bkn-image_c0dede.jpg')",
       }}
     >
       <Head>

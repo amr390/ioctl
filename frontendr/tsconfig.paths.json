@@ -21,7 +21,12 @@
       "@styles": ["styles"],
       "@styles/*": ["styles/*"],
       "@utils": ["utils"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@services": ["services"],
+      "@services/*": ["services/*"],
+      "@interfaces": ["interfaces"],
+      "@interfaces/*": ["interfaces/*"]
+
     }
   }
 }
