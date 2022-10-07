@@ -20,6 +20,9 @@ export const Team = () => (
               alt='...'
               src={'/img/team-1-800x800.jpg'}
               className='shadow-lg rounded-full max-w-full mx-auto'
+              width='16px'
+              height='16px'
+              layout='responsive'
               style={{ maxWidth: '120px' }}
             />
             <div className='pt-6 text-center'>
@@ -55,6 +58,9 @@ export const Team = () => (
             <Image
               alt='...'
               src={'/img/team-2-800x800.jpg'}
+              width='16px'
+              height='16px'
+              layout='responsive'
               className='shadow-lg rounded-full max-w-full mx-auto'
               style={{ maxWidth: '120px' }}
             />
@@ -85,6 +91,9 @@ export const Team = () => (
             <Image
               alt='...'
               src={'/img/team-3-800x800.jpg'}
+              width='16px'
+              height='16px'
+              layout='responsive'
               className='shadow-lg rounded-full max-w-full mx-auto'
               style={{ maxWidth: '120px' }}
             />
@@ -121,6 +130,9 @@ export const Team = () => (
             <Image
               alt='...'
               src={'/img/team-4-470x470.png'}
+              width='16px'
+              height='16px'
+              layout='responsive'
               className='shadow-lg rounded-full max-w-full mx-auto'
               style={{ maxWidth: '120px' }}
             />

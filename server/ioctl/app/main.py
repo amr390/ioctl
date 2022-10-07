@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
@@ -21,6 +22,13 @@ if settings.BACKEND_CORS_ORIGINS:
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
-@app.get("/")
+@app.get("/healthcheck")
 async def index():
     return {"message": "ok"}
+
+
+def start_server():
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, log_level="debug", reload=True)
+
+if __name__ == "__main__":
+    start_server()

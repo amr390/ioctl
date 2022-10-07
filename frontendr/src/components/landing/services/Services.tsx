@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from 'next/image'
 
 export const Services = () => (
   <section className='pb-20 bg-gray-300 -mt-24'>
@@ -80,6 +80,8 @@ export const Services = () => (
             <Image
               alt='...'
               src='https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1051&q=80'
+              width='16px'
+              height='16px'
               className='w-full align-middle rounded-t-lg'
             />
             <blockquote className='relative p-8 mb-4'>

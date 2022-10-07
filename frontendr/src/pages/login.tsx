@@ -1,6 +1,7 @@
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
-import { userService } from '@services/userService'
+import { authenticationService } from '@services/authenticationService'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { FC, useState } from 'react'
 
 export default function Login() {
@@ -51,7 +52,7 @@ export default function Login() {
 const SocialButtons: FC = (): ReactJSXElement => (
   <div className='btn-wrapper text-center hidden'>
     <button
-      className='bg-gray-200 active:bg-gray-100 text-gray-800 font-semibold px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs'
+      className='bg-gray-200 active:bg-gray-100 text-gray-800 px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs'
       type='button'
       style={{ transition: 'all .15s ease' }}
     >
@@ -64,7 +65,7 @@ const SocialButtons: FC = (): ReactJSXElement => (
       Github
     </button>
     <button
-      className='bg-gray-200 active:bg-gray-100 text-gray-800 font-semibold px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs'
+      className='bg-gray-200 active:bg-gray-100 text-gray-800 px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs'
       type='button'
       style={{ transition: 'all .15s ease' }}
     >
@@ -83,8 +84,12 @@ const RegularLoginForm: FC = (): ReactJSXElement => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleLogin = () => userService.login({username, password}) 
-  
+  const router = useRouter()
+  const handleLogin = () => {
+    if (authenticationService.login({ username, password })) {
+      router.replace('/profile')
+    }
+  }
 
   return (
     <form>
@@ -151,20 +156,12 @@ const RegularLoginForm: FC = (): ReactJSXElement => {
 const ResetPassword: FC = (): ReactJSXElement => (
   <div className='flex flex-wrap mt-6'>
     <div className='w-1/2'>
-      <a
-        href='#'
-        onClick={(e) => e.preventDefault()}
-        className='text-gray-300'
-      >
+      <a href='#' onClick={(e) => e.preventDefault()} className='text-gray-300'>
         <small>Forgot password?</small>
       </a>
     </div>
     <div className='w-1/2 text-right'>
-      <a
-        href='#'
-        onClick={(e) => e.preventDefault()}
-        className='text-gray-300'
-      >
+      <a href='#' onClick={(e) => e.preventDefault()} className='text-gray-300'>
         <small>Create new account</small>
       </a>
     </div>

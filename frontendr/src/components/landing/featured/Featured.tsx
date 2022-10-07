@@ -16,7 +16,7 @@ export const Featured = () => (
         y='0'
       >
         <polygon
-          className='text-white fill-current'
+          className='text-grey-800 fill-current'
           points='2560 0 2560 100 0 100'
         ></polygon>
       </svg>
@@ -28,6 +28,9 @@ export const Featured = () => (
           <Image
             alt='...'
             className='max-w-full rounded-lg shadow-lg'
+            width='24px'
+            height='24px'
+            layout='responsive'
             src='https://images.unsplash.com/photo-1555212697-194d092e3b8f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80'
           />
         </div>
@@ -39,8 +42,8 @@ export const Featured = () => (
             <h3 className='text-3xl font-semibold'>A growing company</h3>
             <p className='mt-4 text-lg leading-relaxed text-gray-600'>
               The extension comes with three pre-built pages to help you get
-              started faster. You can change the text and images and you&apos;re good
-              to go.
+              started faster. You can change the text and images and you&apos;re
+              good to go.
             </p>
             <ul className='list-none mt-6'>
               <li className='py-2'>
