@@ -1,5 +1,6 @@
 import { ICredentials } from '@interfaces'
 import { decode, JwtPayload } from 'jsonwebtoken'
+import { toast } from 'react-hot-toast'
 
 const endpoint = 'http://localhost:8000'
 
@@ -9,18 +10,26 @@ type IToken = {
 }
 
 class AuthenticationService {
-  public login = (credentials: ICredentials): boolean => {
-    fetch(`${endpoint}/api/v1/login/access-token`, {
-      method: 'POST',
-      headers: new Headers([
-        ['content-type', 'application/x-www-form-urlencoded'],
-      ]),
-      body: new URLSearchParams({ ...credentials }),
-    })
-      .then((response) => response.json())
-      .then((json) => this.storeToken(json))
-
-    return this.isLoggedIn()
+  public login = async (credentials: ICredentials): Promise<boolean> => {
+    return new Promise((resolve, reject) =>
+      fetch(`${endpoint}/api/v1/login/access-token`, {
+        method: 'POST',
+        headers: new Headers([
+          ['content-type', 'application/x-www-form-urlencoded'],
+        ]),
+        body: new URLSearchParams({ ...credentials }),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          this.storeToken(json)
+          toast.success(`Welcome ${credentials.username}`)
+          resolve(true)
+        })
+        .catch((err) => {
+          toast.error(`Problem ocurred on login: ${err}`)
+          reject(false)
+        })
+    )
   }
 
   public logout = (): void => this.cleanTokenInformation()

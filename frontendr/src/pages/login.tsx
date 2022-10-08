@@ -3,6 +3,7 @@ import { authenticationService } from '@services/authenticationService'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { FC, useState } from 'react'
+import toast from 'react-hot-toast'
 
 export default function Login() {
   return (
@@ -28,17 +29,17 @@ export default function Login() {
                         Sign in
                       </h6>
                     </div>
-                    {SocialButtons({})}
+                    <SocialButtons />
                     <hr className='mt-6 border-b-1 border-gray-300' />
                   </div>
                   <div className='flex-auto px-4 lg:px-10 py-10 pt-0'>
                     <div className='text-gray-300 text-center mb-3 font-bold hidden'>
                       <small>Or sign in with credentials</small>
                     </div>
-                    {RegularLoginForm({})}
+                    <RegularLoginForm />
                   </div>
                 </div>
-                {ResetPassword({})}
+                <ResetPassword />
               </div>
             </div>
           </div>
@@ -85,8 +86,10 @@ const RegularLoginForm: FC = (): ReactJSXElement => {
   const [password, setPassword] = useState('')
 
   const router = useRouter()
-  const handleLogin = () => {
-    if (authenticationService.login({ username, password })) {
+
+  const handleLogin = async () => {
+    const isLoggedIn = await authenticationService.login({ username, password })
+    if (isLoggedIn) {
       router.replace('/profile')
     }
   }

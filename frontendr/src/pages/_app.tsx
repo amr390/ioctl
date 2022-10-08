@@ -4,10 +4,10 @@ import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div>
+    <>
       <Toaster />
       <Component {...pageProps} />
-    </div>
+    </>
   )
 }
 
