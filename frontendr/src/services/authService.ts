@@ -1,18 +1,18 @@
 import { ICredentials } from '@interfaces'
+import { API_ROUTES } from '@utils/constants'
 import { decode, JwtPayload } from 'jsonwebtoken'
 import { toast } from 'react-hot-toast'
 
-const endpoint = 'http://localhost:8000'
 
 type IToken = {
   access_token: string
   token_type: string
 }
 
-class AuthenticationService {
+class AuthService {
   public login = async (credentials: ICredentials): Promise<boolean> => {
     return new Promise((resolve, reject) =>
-      fetch(`${endpoint}/api/v1/login/access-token`, {
+      fetch(`${API_ROUTES.SIGN_IN}`, {
         method: 'POST',
         headers: new Headers([
           ['content-type', 'application/x-www-form-urlencoded'],
@@ -23,7 +23,7 @@ class AuthenticationService {
         .then((json) => {
           this.storeToken(json)
           toast.success(`Welcome ${credentials.username}`)
-          resolve(true)
+          resolve(true),
         })
         .catch((err) => {
           toast.error(`Problem ocurred on login: ${err}`)
@@ -31,6 +31,8 @@ class AuthenticationService {
         })
     )
   }
+
+  public getAuthenticatedUser()
 
   public logout = (): void => this.cleanTokenInformation()
 
@@ -67,4 +69,4 @@ class AuthenticationService {
   private cleanTokenInformation = (): void => localStorage.removeItem('token')
 }
 
-export const authenticationService = new AuthenticationService()
+export const authService = new AuthService()

@@ -2,10 +2,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { Layout } from '../components/verde/_layout'
-import { authenticationService } from '@services/authenticationService'
+import { authService } from '@services/authenticationService'
 
 const IndexPage = () => {
-  const url = authenticationService.isLoggedIn() ? '/profile' : '/login';
+  const url = authService.isLoggedIn() ? '/profile' : '/login';
   return (
     <Layout>
       <section

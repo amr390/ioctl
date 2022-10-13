@@ -1,9 +1,8 @@
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
-import { authenticationService } from '@services/authenticationService'
+import { authService } from '@services/authenticationService'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { FC, useState } from 'react'
-import toast from 'react-hot-toast'
 
 export default function Login() {
   return (
@@ -88,7 +87,7 @@ const RegularLoginForm: FC = (): ReactJSXElement => {
   const router = useRouter()
 
   const handleLogin = async () => {
-    const isLoggedIn = await authenticationService.login({ username, password })
+    const isLoggedIn = await authService.login({ username, password })
     if (isLoggedIn) {
       router.replace('/profile')
     }
