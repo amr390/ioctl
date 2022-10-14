@@ -1,11 +1,71 @@
 import React from 'react'
 
-export const RightPane:React.FC = (props: {}) => {
+export const RightPane: React.FC = (props: {}) => {
   return (
-    <div className='w-fixed w-1/4 flex-shrik flex-grow-0 px-2'>
-      <div className='p-4 sm:flex-col px-2'>
-        
+    <div className='flex flex-grow-1 flex-shrik h-screen w-fixed w-1/4 px-2 bg-white float-right justify-between'>
+      <div className='flex w-full items-center justify-evenly p-4 sm:flex-col px-2'>
+        <section className='flex flex-row justify-evenly w-full items-center h-32 rounded-sm border bg-gray-50 border-gray-100'>
+          <div className='shadow-sm shadow-gray-100'>
+            <h2 className='font-bold txt-lg'>Checks</h2>
+            <span className='text-sm text-neutral-500 font-light'>
+              In/Out periods
+            </span>
+          </div>
+          <div className='flex items-start'>
+            <button className='w-16 h-8 rounded-md border-white shadow-gray-200 txt-black text-sm font-semibold bg-yellow-400'>
+              Show
+            </button>
+          </div>
+        </section>
+        <section className='flex flex-col justify-around px-2 w-full items-center h-32 rounded-sm border bg-gray-50 border-gray-100'>
+          <div className='flex flex-row justify-between px-2 w-full items-center'>
+            <div className='flex flex-col gap-2 pt-2 shadow-sm shadow-gray-100'>
+              <h2 className='font-bold txt-lg'>Team</h2>
+              <span className='text-sm text-neutral-500 font-light'>
+                Team view
+              </span>
+            </div>
+            <div className='flex items-start'>
+              <button className='w-10 h-6 rounded-md border-white shadow-gray-200 text-black text-xs font-semibold bg-yellow-400'>
+                Show
+              </button>
+            </div>
+          </div>
+          <div className="flex w-full h-2/5 justify-center">
+            <div className="flex flex-row justify-between items-center px-2 border rounded-md w-11/12 bg-black text-white text-center">
+              <span className="text-white text-sm ">New member</span>
+              <button className='w-10 h-6 rounded-md border-white shadow-gray-200 text-black text-xs font-semibold bg-yellow-400'>join</button>
+            </div>
+          </div>
+        </section>
 
+        <section className='flex flex-row justify-evenly w-full items-center h-32 rounded-sm border bg-gray-50 border-gray-100'>
+          <div className='shadow-sm shadow-gray-100'>
+            <h2 className='font-bold txt-lg'>Meetings</h2>
+            <span className='text-sm text-neutral-500 font-light'>
+              Latest meetings
+            </span>
+          </div>
+          <div className='flex items-start'>
+            <button className='w-16 h-8 rounded-md border-white shadow-gray-200 txt-black text-sm font-semibold bg-yellow-400'>
+              Show
+            </button>
+          </div>
+        </section>
+
+        <section className='flex flex-row justify-evenly w-full items-center h-32 rounded-sm border bg-gray-50 border-gray-100'>
+          <div className='shadow-sm shadow-gray-100'>
+            <h2 className='font-bold txt-lg'>Vacations</h2>
+            <span className='text-sm text-neutral-500 font-light'>
+              Time off from work
+            </span>
+          </div>
+          <div className='flex items-start'>
+            <button className='w-16 h-8 rounded-md border-white shadow-gray-200 txt-black text-sm font-semibold bg-yellow-400'>
+              Show
+            </button>
+          </div>
+        </section>
       </div>
     </div>
   )

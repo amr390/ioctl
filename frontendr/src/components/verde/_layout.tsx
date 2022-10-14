@@ -21,7 +21,7 @@ export const Layout = (props: PropsWithChildren<Props>) => {
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       </Head>
       <div
-        className='bg-cover bg-center bg-no-repeat bg-gradient-to-b bg-gray-50'
+        className='bg-cover bg-center bg-no-repeat bg-gradient-to-b bg-white'
         /* style={{ minHeight: '100vh' }} */
       >
         {/* <header> */}
