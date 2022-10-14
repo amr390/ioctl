@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
     # 60 minunutes * 24 hours * 8 days = 8 days
-    ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 8
+    ACCESS_TOKEN_EXPIRE_MINUTES = 10
     SERVER_NAME = str
     SERVER_HOST = AnyHttpUrl
     # bACKEND_CORS_ORIGINS is a JSON-formatted list of origins

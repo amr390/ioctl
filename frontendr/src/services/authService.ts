@@ -23,7 +23,7 @@ class AuthService {
         .then((json) => {
           this.storeToken(json)
           toast.success(`Welcome ${credentials.username}`)
-          resolve(true),
+          resolve(true)
         })
         .catch((err) => {
           toast.error(`Problem ocurred on login: ${err}`)
