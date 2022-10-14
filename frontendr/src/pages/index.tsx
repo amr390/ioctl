@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { Layout } from '../components/verde/_layout'
-import { authService } from '@services/authenticationService'
+import { authService } from '@services/authService'
 
 const IndexPage = () => {
   const url = authService.isLoggedIn() ? '/profile' : '/login';

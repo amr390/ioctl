@@ -1,5 +1,5 @@
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
-import { authService } from '@services/authenticationService'
+import { authService } from '@services/authService'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { FC, useState } from 'react'

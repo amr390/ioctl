@@ -32,8 +32,6 @@ class AuthService {
     )
   }
 
-  public getAuthenticatedUser()
-
   public logout = (): void => this.cleanTokenInformation()
 
   public isLoggedIn = (): boolean => {
