@@ -3,7 +3,6 @@ import { API_ROUTES } from '@utils/constants'
 import { decode, JwtPayload } from 'jsonwebtoken'
 import { toast } from 'react-hot-toast'
 
-
 type IToken = {
   access_token: string
   token_type: string
@@ -32,10 +31,19 @@ class AuthService {
     )
   }
 
+  public getDetails = () => ({
+    authenticated: this.isLoggedIn(),
+    userId: this.getUserId(),
+  })
+
   public logout = (): void => this.cleanTokenInformation()
 
-  public isLoggedIn = (): boolean => {
-    return !this.isExpired()
+  public isLoggedIn = (): boolean => !this.isExpired()
+
+  public getUserId = (): string => {
+    const token = this.getToken()
+    const userId: string = token?.sub || '-1'
+    return userId
   }
 
   public isExpired = (): boolean => {
