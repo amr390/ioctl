@@ -2,10 +2,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { Layout } from '../components/verde/_layout'
-import { authService } from '@services/authService'
+import { useAuthenticated } from '@hooks/useAuthenticated'
+import toast from 'react-hot-toast'
 
 const IndexPage = () => {
-  const url = authService.isLoggedIn() ? '/profile' : '/login';
+  const {userId, authenticated} = useAuthenticated()
+  const url = authenticated ? '/profile' : '/login';
+  /* toast(authenticated ? `user is authenticated: ${userId}` : 'Not yet authenticated') */
   return (
     <Layout>
       <section
