@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react'
-
 import { Hero } from '../components/profile/Hero'
 import { Contact } from '../components/profile/Contact'
 import { Layout } from '../components/profile/_layout'
