@@ -26,6 +26,8 @@ fileConfig(config.config_file_name)
 sys.path.append(os.path.join(os.getcwd()))
 print(f"sys.path: {sys.path}")
 from app.db.base import Base  # noqa
+from app.models.user import User
+from app.models.customer import Customer
 
 target_metadata = Base.metadata
 
