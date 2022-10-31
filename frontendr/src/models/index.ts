@@ -9,3 +9,8 @@ export interface ICredentials {
   username: string
   password: string
 }
+
+export type IToken = {
+  access_token: string
+  token_type: string
+}
