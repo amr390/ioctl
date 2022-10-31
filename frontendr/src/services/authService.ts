@@ -1,12 +1,8 @@
-import { ICredentials } from '@interfaces'
 import { API_ROUTES } from '@utils/constants'
 import { decode, JwtPayload } from 'jsonwebtoken'
+import { ICredentials, IToken } from 'models'
 import { toast } from 'react-hot-toast'
 
-type IToken = {
-  access_token: string
-  token_type: string
-}
 
 class AuthService {
   public login = async (credentials: ICredentials): Promise<boolean> => {

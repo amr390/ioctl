@@ -24,8 +24,8 @@
       "@utils/*": ["utils/*"],
       "@services": ["services"],
       "@services/*": ["services/*"],
-      "@interfaces": ["interfaces"],
-      "@interfaces/*": ["interfaces/*"]
+      "@models": ["models"],
+      "@models/*": ["models/*"]
 
     }
   }
