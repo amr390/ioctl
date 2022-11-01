@@ -1,12 +1,20 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String, ForeignKey
+from sqlalchemy.schema import Table
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
-    from .item import Item  # noqa: F401
+    from .role import Role# noqa: F401
+
+user_roles_table = Table(
+    "user_roles",
+    Base.metadata,
+    Column("user_id", ForeignKey('user.id')),
+    Column("role_id", ForeignKey('role.id')),
+)
 
 
 class User(Base):
@@ -17,3 +25,4 @@ class User(Base):
     is_active = Column(Boolean(), default=True)
     is_superuser = Column(Boolean(), default=False)
     profile = relationship("Customer", back_populates="credentials")
+    roles = relationship('Role", secondary=user_roles_table)
