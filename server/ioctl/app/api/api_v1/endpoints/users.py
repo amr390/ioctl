@@ -1,6 +1,7 @@
 from typing import Any, List
 
-from fastapi import APIRouter, Body, Depends, HTTPException
+from fastapi import APIRouter, Body, Depends, HTTPException, Security
+from fastapi.security import SecurityScopes
 from fastapi.encoders import jsonable_encoder
 from pydantic.networks import EmailStr
 from sqlalchemy.orm import Session
@@ -8,6 +9,7 @@ from sqlalchemy.orm import Session
 from app import crud, models, schemas
 from app.api import deps
 from app.core.config import settings
+from app.core.role_checker import RoleChecker
 from app.utils import send_new_account_email
 
 router = APIRouter()
@@ -18,7 +20,10 @@ def read_users(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: models.User = Security(
+            deps.get_current_active_user,
+            scopes=[RoleChecker.ADMIN['name'], ]
+        ),
 ) -> Any:
     """
     Retriever user list.

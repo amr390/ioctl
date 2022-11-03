@@ -14,4 +14,27 @@ class RoleChecker:
         for role in user.roles:
             if role.name not in self.allowed_roles:
                 debug(f"User with role {role} not in {self.allowed_roles}")
-                raise HTTPException(status_code=403, detail="Operation not permitted")
+                raise HTTPException(status_code=403,
+                                    detail="Operation not permitted")
+
+    GUEST = {
+        "name": "GUEST",
+        "description": "A Guest Account",
+    }
+    ACCOUNT_ADMIN = {
+        "name": "ACCOUNT_ADMIN",
+        "description": "Primary Administrator/Superuser For an Account",
+    }
+
+    ACCOUNT_MANAGER = {
+        "name": "ACCOUNT_MANAGER",
+        "description": "Day to Day Administrator of Events For an Account",
+    }
+    ADMIN = {
+        "name": "ADMIN",
+        "description": "Admin of Application Ecosystem",
+    }
+    SUPER_ADMIN = {
+        "name": "SUPER_ADMIN",
+        "description": "Super Administrator of Application Ecosystem",
+    }
