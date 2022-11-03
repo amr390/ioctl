@@ -8,7 +8,8 @@ from app.db.base_class import Base
 # this should be if from typing import TYPE_CHECKING but it turns out is null
 from .role import Role  # noqa: F401
 
-logging.basicConfig(level="info")
+
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
