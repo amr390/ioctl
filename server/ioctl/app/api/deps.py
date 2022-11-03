@@ -58,7 +58,7 @@ def get_current_user(
     user = crud.user.get(db, id=token_data.sub)
     if not user:
         raise HTTPException(status_code=404, detail="Usern not found")
-    if (security_scopes.scopes and not user.roles:
+    if (security_scopes.scopes and not user.roles):
         raise HTTPException(
             status_code=401,
             detail="Not enough permissions",
