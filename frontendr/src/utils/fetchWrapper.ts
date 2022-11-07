@@ -1,11 +1,25 @@
+import { authService } from '@services/authService'
 
+const token = authService.getToken()
 
-const get = (): void => {
-
+interface IOptions{
+  method: string;
+  success: Function;
+  error: Function
 }
-const post = (): void => {}
-const put = (): void => {}
-const _delete = (): void => {}
+
+const get = (url: string, opts: {IOptions}): void => {
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  }
+
+  fetch(url, opts)
+}
+const post = (): void => { }
+const put = (): void => { }
+const _delete = (): void => { }
 
 export const fetchWrapper = {
   get,
@@ -13,5 +27,3 @@ export const fetchWrapper = {
   put,
   _delete,
 }
-
-

@@ -21,9 +21,11 @@ def read_users(
     skip: int = 0,
     limit: int = 100,
     current_user: models.User = Security(
-            deps.get_current_active_user,
-            scopes=[RoleChecker.ADMIN['name'], ]
-        ),
+        deps.get_current_active_user,
+        scopes=[
+            RoleChecker.ADMIN["name"],
+        ],
+    ),
 ) -> Any:
     """
     Retriever user list.

@@ -10,6 +10,7 @@ from uvicorn.config import logging
 from app import crud, models, schemas
 from app.core import security
 from app.core.config import settings
+from app.core.role_checker import RoleChecker
 from app.db.session import SessionLocal
 
 
@@ -37,17 +38,16 @@ def get_current_user(
         authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
     else:
         authenticate_value = "Bearer"
-    credentials_exception = HTTPException(
-        status_code=401,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": authenticate_value},
-    )
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
         )
-        if payload.get("id") is None:
-            raise credentials_exception
+        if payload.get("sub") is None:
+            raise HTTPException(
+                status_code=401,
+                detail="Could not validate credentials",
+                headers={"WWW-Authenticate": authenticate_value},
+            )
         token_data = schemas.TokenPayload(**payload)
     except (jwt.JWTError, ValidationError):
         logger.error("Eerror Decoding token", exc_info=True)
@@ -56,15 +56,8 @@ def get_current_user(
             detail="Could not validate credentials",
         )
     user = crud.user.get(db, id=token_data.sub)
-    if not user:
-        raise HTTPException(status_code=404, detail="Usern not found")
-    if (security_scopes.scopes and not user.roles):
-        raise HTTPException(
-            status_code=401,
-            detail="Not enough permissions",
-            headers={"WWW-Authenticate": authenticate_value},
-        )
-    return user
+    role_checker = RoleChecker(security_scopes.scopes)
+    return role_checker.has_permission(authenticate_value, user)
 
 
 def get_current_active_user(
