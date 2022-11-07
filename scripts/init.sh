@@ -1,6 +1,5 @@
 #!/usr/bin/bash 
 
-
 echo "Installing initial schema from alembic"
 alembic upgrade head
 

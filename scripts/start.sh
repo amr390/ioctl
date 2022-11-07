@@ -1,3 +1,3 @@
 #!/bin/zsh
 
-uvicorn app.ioctl.main:app --reload
+ioctl && cd server/ioctl && uvicorn app.ioctl.main:app --reload
