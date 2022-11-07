@@ -24,7 +24,12 @@ def create_access_token(
         )
     to_encode = {"exp": expire, "sub": str(subject)}
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
+
     return encoded_jwt
+
+
+def refres_token(jwt_token: str) -> str:
+    pass
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

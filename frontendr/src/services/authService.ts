@@ -3,7 +3,6 @@ import { decode, JwtPayload } from 'jsonwebtoken'
 import { ICredentials, IToken } from 'models'
 import { toast } from 'react-hot-toast'
 
-
 class AuthService {
   public login = async (credentials: ICredentials): Promise<boolean> => {
     return new Promise((resolve, reject) =>
@@ -37,13 +36,13 @@ class AuthService {
   public isLoggedIn = (): boolean => !this.isExpired()
 
   public getUserId = (): string => {
-    const token = this.getToken()
+    const token = this.getDecodedToken()
     const userId: string = token?.sub || '-1'
     return userId
   }
 
   public isExpired = (): boolean => {
-    const token = this.getToken()
+    const token = this.getDecodedToken()
     const now = new Date()
     // if no token set date to 1970
     const exp: Date = token?.exp ? new Date(token.exp * 1000) : new Date(0)
@@ -51,7 +50,12 @@ class AuthService {
     return exp.getTime() < now.getTime()
   }
 
-  private getToken = (): JwtPayload => {
+  public getToken = (): string => {
+    const storedToken: string = localStorage.getItem('token') || ''
+    return storedToken
+  }
+
+  private getDecodedToken = (): JwtPayload => {
     if (typeof window !== 'undefined') {
       const storedToken: string = localStorage.getItem('token') || ''
 
