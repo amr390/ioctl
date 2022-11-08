@@ -28,7 +28,6 @@ def get_db() -> Generator:
     finally:
         db.close()
 
-
 def get_current_user(
     security_scopes: SecurityScopes,
     db: Session = Depends(get_db),
@@ -58,6 +57,36 @@ def get_current_user(
     user = crud.user.get(db, id=token_data.sub)
     role_checker = RoleChecker(security_scopes.scopes)
     return role_checker.has_permission(authenticate_value, user)
+
+
+def validate_refresh_token(
+    security_scopes: SecurityScopes,
+    db: Session = Depends(get_db),
+    token: str = Depends(reusable_oauth2),
+) -> models.User:
+    if security_scopes.scopes:
+        authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
+    else:
+        authenticate_value = "Bearer"
+    try:
+        payload = jwt.decode(
+            token, settings.REFRESH_SECRET_KEY, algorithms=[security.ALGORITHM]
+        )
+        if payload.get("sub") is None:
+            raise HTTPException(
+                status_code=401,
+                detail="Could not validate credentials",
+                headers={"WWW-Authenticate": authenticate_value},
+            )
+        token_data = schemas.TokenPayload(**payload)
+    except (jwt.JWTError, ValidationError):
+        logger.error("Eerror Decoding token", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Could not validate credentials",
+        )
+    user = crud.user.get(db, id=token_data.sub)
+    return user
 
 
 def get_current_active_user(
