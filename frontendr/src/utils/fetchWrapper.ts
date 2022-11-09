@@ -8,6 +8,10 @@ interface IOptions{
   error: Function
 }
 
+const __handle = () => {
+
+}
+
 const get = (url: string, opts: {IOptions}): void => {
   const headers = {
     Authorization: `Bearer ${token}`,
