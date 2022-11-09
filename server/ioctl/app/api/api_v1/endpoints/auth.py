@@ -45,8 +45,8 @@ def login_access_token(
     }
 
 
-# login/test-token
-@router.post("/auth/refresh", response_model=schemas.User)
+# login/refresh
+@router.post("/auth/refresh", response_model=schemas.Token)
 def refresh_token(user: User = Depends(deps.validate_refresh_token)) -> Any:
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return {

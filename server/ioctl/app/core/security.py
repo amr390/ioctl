@@ -23,7 +23,9 @@ def create_access_token(
         expire = datetime.utcnow() + timedelta(
             minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
-    to_encode = {"exp": expire, "sub": str(user.id), "roles": user.roles}
+    role_names = [r.name for r in user.roles]
+
+    to_encode = {"exp": expire, "sub": str(user.id), "roles": role_names}
     encoded_jwt = jwt.encode(
         to_encode,
         settings.SECRET_KEY,
