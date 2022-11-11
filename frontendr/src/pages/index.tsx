@@ -3,7 +3,6 @@ import Link from 'next/link'
 import React from 'react'
 import { Layout } from '../components/verde/_layout'
 import { useAuthenticated } from '@hooks/useAuthenticated'
-import toast from 'react-hot-toast'
 
 const IndexPage = () => {
   const {userId, authenticated} = useAuthenticated()
