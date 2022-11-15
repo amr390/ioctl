@@ -1,38 +1,33 @@
+
 import { authService } from '@services/authService'
+import { useState } from 'react'
 
-const token = authService.getToken()
-
-
-interface IOptions{
-  method: string;
-  success: Function;
-  error: Function;
-  headers?: any;
-}
+const {token, setToken} = useState(authService.getToken())
 
 const __handle = () => {
    
 
 }
 
-const _addHeaders = (opts : IOptions): IOptions => {
-  const headers = {
+const _addHeaders = () => ({
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json',
     Accept: 'application/json',
-  }
+})
+  
 
-
-  return Object.assign({}, opts, headers) 
+const get = (url: string): Promise<any> => {
+  let opts = Object.assign({}, _addHeaders(), { method: 'GET'})
+  return fetch(url, opts)
 }
 
-const get = (url: string, opts: IOptions): void => {
-  fetch(url, _addHeaders(opts))
-}
+const post = (url: string): void => {
 
-const post = (): void => { }
-const put = (): void => { }
-const _delete = (): void => { }
+}
+const put = (url: string): void => { 
+}
+const _delete = (url: string): void => { 
+}
 
 export const fetchWrapper = {
   get,

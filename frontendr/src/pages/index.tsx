@@ -3,17 +3,25 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { Layout } from '../components/verde/_layout'
 import { useAuthenticated } from '@hooks/useAuthenticated'
+import { fetchWrapper } from '@utils/fetchWrapper'
+import { API_ROUTES } from '@utils/constants'
 
 const IndexPage = () => {
-  const {userId, authenticated} = useAuthenticated()
-  const url = authenticated ? '/profile' : '/login';
+  const { userId, authenticated } = useAuthenticated()
+  const url = authenticated ? '/profile' : '/login'
   //TODO: replace by context
-  const [me, setme] = useState(null);
+  const [me, setMe] = useState(null)
 
-   useEffect(()=>{
-  }, [userId])
+  useEffect(() => {
+    fetchWrapper
+      .get(`${API_ROUTES.USER_ME_GET}/${userId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setMe(data)
+        console.log('user is ', me, data)
+      })
+  }, [me, userId])
 
-  )
   /* toast(authenticated ? `user is authenticated: ${userId}` : 'Not yet authenticated') */
   return (
     <Layout>
