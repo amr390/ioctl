@@ -1,12 +1,19 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Layout } from '../components/verde/_layout'
 import { useAuthenticated } from '@hooks/useAuthenticated'
 
 const IndexPage = () => {
   const {userId, authenticated} = useAuthenticated()
   const url = authenticated ? '/profile' : '/login';
+  //TODO: replace by context
+  const [me, setme] = useState(null);
+
+   useEffect(()=>{
+  }, [userId])
+
+  )
   /* toast(authenticated ? `user is authenticated: ${userId}` : 'Not yet authenticated') */
   return (
     <Layout>
