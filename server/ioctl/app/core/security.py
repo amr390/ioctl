@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-# from typing import Any, Union
+from typing import Any, Union
 
 from jose import jwt
 from passlib.context import CryptContext
@@ -15,7 +15,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 ALGORITHM = "HS256"
 
 
-def create_access_token(user: User, expires_delta: timedelta | None = None) -> str:
+def create_access_token(user: User, expires_delta: Union[timedelta, None] = None) -> str:
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
@@ -30,7 +30,7 @@ def create_access_token(user: User, expires_delta: timedelta | None = None) -> s
     return encoded_jwt
 
 
-def create_refresh_token(user: User, expires_delta: timedelta | None = None) -> str:
+def create_refresh_token(user: User, expires_delta: Union[timedelta, None] = None) -> str:
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
@@ -40,6 +40,9 @@ def create_refresh_token(user: User, expires_delta: timedelta | None = None) -> 
     to_encode = {"exp": expire, "sub": str(user.id)}
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+def get_existing_refresh_token(username: str):
+    pass
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

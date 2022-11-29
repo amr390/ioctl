@@ -499,7 +499,7 @@ python-versions = ">=3.7"
 name = "mypy"
 version = "0.991"
 description = "Optional static typing for Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
@@ -991,7 +991,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "eadf2e2ab5fd70a880a20c1daa8b022e7e305805e3371bc853e5800793e81d98"
+content-hash = "d6079e10fa6852af32a1bdfa04302b3a1c5b50eb5d8f22d81edab8f73de9972e"
 
 [metadata.files]
 alembic = [
