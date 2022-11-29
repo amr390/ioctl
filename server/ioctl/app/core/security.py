@@ -41,6 +41,9 @@ def create_refresh_token(user: User, expires_delta: Union[timedelta, None] = Non
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+def get_existing_refresh_token(username: str):
+    pass
+
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
