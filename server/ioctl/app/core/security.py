@@ -36,15 +36,15 @@ def create_access_token(
 
 
 def create_refresh_token(db: Session, token: schemas.TokenCreate) -> RefreshToken:
-    return crud.token.create(db, token)
+    return crud.token.create(db, obj_in=token)
 
 
 def get_existing_refresh_token(db: Session, user_id: int) -> RefreshToken:
-    return crud.token.get_by_user_id(db, user_id)
+    return crud.token.get_by_user_id(db, user_id=user_id)
 
 
 def delete_token(db: Session, token_id: int) -> None:
-    crud.token.delete(db, token_id)
+    crud.token.delete(db, token_id=token_id)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

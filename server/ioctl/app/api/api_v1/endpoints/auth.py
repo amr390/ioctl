@@ -47,7 +47,9 @@ def login_access_token(
 
     refresh_token = get_existing_refresh_token(db, user.id)
     current_timestamp = round(datetime.now().timestamp())  # seconds
-    token_still_valid = refresh_token.validity > current_timestamp
+    token_still_valid = False
+    if refresh_token is not None:
+        token_still_valid = refresh_token.validity_timestamp > current_timestamp
 
     if refresh_token is not None and token_still_valid:
         refresh_token_id = refresh_token.id
@@ -56,9 +58,9 @@ def login_access_token(
             delete_token(refresh_token.id)
         seconds_till_expiration = settings.REFRESH_TOKEN_EXPIRE_MINUTES * 60
         new_token_data = schemas.TokenCreate(
-            id=uuid.uuid4(),
+            id=1,
             user_id=user.id,
-            validity=current_timestamp * seconds_till_expiration,
+            validity_timestamp=current_timestamp * seconds_till_expiration,
         )
 
         new_refresh_token_id = create_refresh_token(db, new_token_data)
@@ -69,9 +71,9 @@ def login_access_token(
     cookie_token_expiration = current_timestamp + seconds_till_expiration
     cookie_token_expiration_in_ms = cookie_token_expiration * 1000
 
-    access_token_expires = timedelta(minues=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        delta={"sub": user.username}, expires_delta=access_token_expires
+        user=user, expires_delta=access_token_expires
     )
 
     response = JSONResponse(
@@ -86,7 +88,7 @@ def login_access_token(
         key="ioctl-rt",
         value=refresh_token_id,
         expires=cookie_token_expiration_in_ms,
-        httpOnly=True,
+        httponly=True,
     )
 
     return response
