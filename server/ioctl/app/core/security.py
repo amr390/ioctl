@@ -35,8 +35,8 @@ def create_access_token(
     return encoded_jwt
 
 
-def create_refresh_token(db: Session, token: schemas.TokenCreate) -> str:
-    crud.token.create(db, token)
+def create_refresh_token(db: Session, token: schemas.TokenCreate) -> RefreshToken:
+    return crud.token.create(db, token)
 
 
 def get_existing_refresh_token(db: Session, user_id: int) -> RefreshToken:

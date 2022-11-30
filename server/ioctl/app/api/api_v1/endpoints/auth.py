@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from fastapi import APIRouter, Body, Cookie, Depends, HTTPException
+from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
@@ -53,7 +54,7 @@ def login_access_token(
     else:
         if refresh_token is not None and token_still_valid is False:
             delete_token(refresh_token.id)
-        seconds_till_expiration = settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
+        seconds_till_expiration = settings.REFRESH_TOKEN_EXPIRE_MINUTES * 60
         new_token_data = schemas.TokenCreate(
             id=uuid.uuid4(),
             user_id=user.id,
@@ -65,10 +66,10 @@ def login_access_token(
         refresh_token_id = new_refresh_token_id
 
     seconds_till_expiration = settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
-    cookie_token_expiration = current_timestamp * seconds_till_expiration
-    cookie_token_expiration_in_ms = cookie_token_expiration * 60
+    cookie_token_expiration = current_timestamp + seconds_till_expiration
+    cookie_token_expiration_in_ms = cookie_token_expiration * 1000
 
-    access_token_expires = timedelta(minues=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minues=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         delta={"sub": user.username}, expires_delta=access_token_expires
     )
@@ -84,7 +85,7 @@ def login_access_token(
     response.set_cookie(
         key="ioctl-rt",
         value=refresh_token_id,
-        expires=cookie_token_expiration,
+        expires=cookie_token_expiration_in_ms,
         httpOnly=True,
     )
 
