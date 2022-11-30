@@ -11,3 +11,13 @@ class Token(BaseModel):
 
 class TokenPayload(BaseModel):
     sub: Optional[int] = None
+
+
+class TokenCreate(BaseModel):
+    id: int
+    user_id: int
+    validity: int
+
+
+class TokenUpdate(TokenCreate):
+    pass

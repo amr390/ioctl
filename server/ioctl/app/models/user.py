@@ -6,8 +6,10 @@ from uvicorn.config import logging
 from app.db.base_class import Base
 
 # this should be if from typing import TYPE_CHECKING but it turns out is null
-from .role import Role  # noqa: F401
-from .customer import Customer  # noqa: F401
+import typing
+if typing.TYPE_CHECKING:
+    from .role import Role  # noqa: F401
+    from .customer import Customer  # noqa: F401
 
 
 logging.basicConfig(level=logging.INFO)

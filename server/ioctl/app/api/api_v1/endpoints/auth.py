@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from typing import Any
 
 from fastapi import APIRouter, Body, Cookie, Depends, HTTPException
@@ -9,12 +9,18 @@ from app import crud, models, schemas
 from app.api import deps
 from app.core import security
 from app.core.config import settings
-from app.core.security import get_existing_refresh_token, get_password_hash
+from app.core.security import (
+    create_access_token,
+    create_refresh_token,
+    get_existing_refresh_token,
+    delete_token,
+    get_password_hash,
+)
 from app.models.user import User
 from app.utils import (
     generate_password_reset_token,
     send_reset_password_email,
-    verify_password_reset_token
+    verify_password_reset_token,
 )
 
 router = APIRouter()
@@ -25,7 +31,6 @@ router = APIRouter()
 def login_access_token(
     db: Session = Depends(deps.get_db),
     form_data: OAuth2PasswordRequestForm = Depends(),
-
 ) -> Any:
     """
     OAuth2 compatible token login, get an access token for future requests
@@ -34,22 +39,67 @@ def login_access_token(
         db, email=form_data.username, password=form_data.password
     )
 
-    refres_token = get_existing_refresh_token(user.id)
     if not user:
         raise HTTPException(status_code=400, detail="Incorrent email or passoword")
     elif not crud.user.is_active(user):
         raise HTTPException(status_code=400, detail="Inactive user")
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    refresh_token_expires = timedelta(minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES)
-    return {
-        "access_token": security.create_access_token(
-            user, expires_delta=access_token_expires
-        ),
-        "refresh_token": security.create_refresh_token(
-            user, expires_delta=refresh_token_expires
-        ),
-        "token_type": "bearer",
-    }
+
+    refresh_token = get_existing_refresh_token(db, user.id)
+    current_timestamp = round(datetime.now().timestamp())  # seconds
+    token_still_valid = refresh_token.validity > current_timestamp
+
+    if refresh_token is not None and token_still_valid:
+        refresh_token_id = refresh_token.id
+    else:
+        if refresh_token is not None and token_still_valid is False:
+            delete_token(refresh_token.id)
+        seconds_till_expiration = settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
+        new_token_data = schemas.TokenCreate(
+            id=uuid.uuid4(),
+            user_id=user.id,
+            validity=current_timestamp * seconds_till_expiration,
+        )
+
+        new_refresh_token_id = create_refresh_token(db, new_token_data)
+
+        refresh_token_id = new_refresh_token_id
+
+    seconds_till_expiration = settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
+    cookie_token_expiration = current_timestamp * seconds_till_expiration
+    cookie_token_expiration_in_ms = cookie_token_expiration * 60
+
+    access_token_expires = timedelta(minues=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        delta={"sub": user.username}, expires_delta=access_token_expires
+    )
+
+    response = JSONResponse(
+        content={
+            "access_token": access_token,
+            "token_type": "bearer",
+            "token_expiry": seconds_till_expiration,
+        }
+    )
+
+    response.set_cookie(
+        key="ioctl-rt",
+        value=refresh_token_id,
+        expires=cookie_token_expiration,
+        httpOnly=True,
+    )
+
+    return response
+    # access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    # refresh_token_expires = timedelta(minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES)
+    # return {
+    #     "access_token": security.create_access_token(
+    #         user, expires_delta=access_token_expires
+    #     ),
+    #     "refresh_token": security.create_refresh_token(
+    #         user, expires_delta=refresh_token_expires
+    #     ),
+    #     "token_type": "bearer",
+    # }
 
 
 # login/refresh
