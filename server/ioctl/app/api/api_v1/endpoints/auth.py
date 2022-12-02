@@ -13,7 +13,8 @@ from app.core.config import settings
 from app.core.security import (
     create_access_token,
     create_refresh_token,
-    get_existing_refresh_token,
+    get_existing_refresh_token_by_user_id,
+    get_existing_refresh_token_by_id,
     delete_token,
     get_password_hash,
 )
@@ -45,36 +46,31 @@ def login_access_token(
     elif not crud.user.is_active(user):
         raise HTTPException(status_code=400, detail="Inactive user")
 
-    refresh_token = get_existing_refresh_token(db, user.id)
+    refresh_token = get_existing_refresh_token_by_user_id(db, user.id)
     current_timestamp = round(datetime.now().timestamp())  # seconds
     token_still_valid = False
     if refresh_token is not None:
         token_still_valid = refresh_token.validity_timestamp > current_timestamp
 
     if refresh_token is not None and token_still_valid:
-        refresh_token_id = refresh_token.id
+        refresh_token_id = refresh_token
     else:
         if refresh_token is not None and token_still_valid is False:
-            delete_token(refresh_token.id)
+            delete_token(db, token_id=refresh_token.id)
         seconds_till_expiration = settings.REFRESH_TOKEN_EXPIRE_MINUTES * 60
         new_token_data = schemas.TokenCreate(
             id=1,
             user_id=user.id,
             validity_timestamp=current_timestamp * seconds_till_expiration,
         )
-
-        new_refresh_token_id = create_refresh_token(db, new_token_data)
-
-        refresh_token_id = new_refresh_token_id
+        refresh_token = create_refresh_token(db, new_token_data)
 
     seconds_till_expiration = settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
     cookie_token_expiration = current_timestamp + seconds_till_expiration
     cookie_token_expiration_in_ms = cookie_token_expiration * 1000
 
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        user=user, expires_delta=access_token_expires
-    )
+    access_token = create_access_token(user=user, expires_delta=access_token_expires)
 
     response = JSONResponse(
         content={
@@ -86,44 +82,65 @@ def login_access_token(
 
     response.set_cookie(
         key="ioctl-rt",
-        value=refresh_token_id,
+        value=refresh_token.id,
         expires=cookie_token_expiration_in_ms,
         httponly=True,
     )
 
     return response
-    # access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    # refresh_token_expires = timedelta(minutes=settings.REFRESH_TOKEN_EXPIRE_MINUTES)
-    # return {
-    #     "access_token": security.create_access_token(
-    #         user, expires_delta=access_token_expires
-    #     ),
-    #     "refresh_token": security.create_refresh_token(
-    #         user, expires_delta=refresh_token_expires
-    #     ),
-    #     "token_type": "bearer",
-    # }
 
 
 # login/refresh
 @router.post("/auth/refresh", response_model=schemas.Token)
-def refresh_token(user: User = Depends(deps.validate_refresh_token)) -> Any:
+def refresh_token(
+    refresh_token: int = Cookie(None, description="Refresh token Id"),
+    db: Session = Depends(deps.get_db),
+):
+
+    tokenFromDb = get_existing_refresh_token_by_id(db, refresh_token)
+
+    if tokenFromDb is None:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid refresh token",
+        )
+
+    current_timestamp = round(datetime.now().timestamp())
+
+    if tokenFromDb.validity_timestamp < current_timestamp:
+        delete_token(db, tokenFromDb.id)
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid refresh token",
+        )
+    user = crud.user.get(db, id=tokenFromDb.user_id)
+    # if user is None or user.disabled is True:
+    if user is None:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid user",
+        )
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    return {
-        "access_token": security.create_access_token(
-            user, expires_delta=access_token_expires
-        ),
-        "token_type": "bearer",
-    }
+    access_token = create_access_token(user=user, expires_delta=access_token_expires)
+
+    response = JSONResponse(
+        content={
+            "access_token": access_token,
+            "token_type": "bearer",
+            "token_expiry": settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        }
+    )
+    return response
 
 
 # login/test-token
 @router.post("/auth/validate", response_model=schemas.User)
-def test_token(current_user: models.User = Depends(deps.get_current_user)) -> Any:
+def test_token() -> Any:
     """
     Test access Token
     """
-    return current_user
+
+    return True
 
 
 @router.post("/password-recovery/{email}", response_model=schemas.Msg)
@@ -166,6 +183,7 @@ def reset_password(
     elif not crud.user.is_active(user):
         raise HTTPException(status_code=400, detail="Inactive user")
     hashed_password = get_password_hash(new_password)
+
     user.hashed_password = hashed_password
     db.add(user)
     db.commit()

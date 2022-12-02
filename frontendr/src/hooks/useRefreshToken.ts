@@ -1,7 +1,6 @@
 import axios from '@utils/axios'
 import { API_ROUTES } from '@utils/constants'
 import { AxiosResponse } from 'axios'
-import { useAuthenticated } from './useAuthenticated'
 
 const setAuth = (prev: any) => {}
 

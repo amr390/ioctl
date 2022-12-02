@@ -39,8 +39,11 @@ def create_refresh_token(db: Session, token: schemas.TokenCreate) -> RefreshToke
     return crud.token.create(db, obj_in=token)
 
 
-def get_existing_refresh_token(db: Session, user_id: int) -> RefreshToken:
+def get_existing_refresh_token_by_user_id(db: Session, user_id: int) -> RefreshToken | None:
     return crud.token.get_by_user_id(db, user_id=user_id)
+
+def get_existing_refresh_token_by_id(db: Session, token_id: int) -> RefreshToken | None:
+    return crud.token.get(db, id=token_id)
 
 
 def delete_token(db: Session, token_id: int) -> None:
