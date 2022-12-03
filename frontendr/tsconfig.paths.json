@@ -18,6 +18,8 @@
       "@pages/*": ["pages/*"],
       "@redux": ["redux"],
       "@redux/*": ["redux/*"],
+      "@context": ["context"],
+      "@context/*": ["context/*"],
       "@styles": ["styles"],
       "@styles/*": ["styles/*"],
       "@utils": ["utils"],

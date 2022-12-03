@@ -6,5 +6,8 @@ const config: any = {
 
 
 export default axios.create({
-  baseURL: config.serverUrl
+  baseURL: config.serverUrl,
+  withCredentials: true
 })
+
+

@@ -2,12 +2,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { Layout } from '../components/verde/_layout'
-import { useAuthenticated } from '@hooks/useAuthenticated'
-import { fetchWrapper } from '@utils/fetchWrapper'
-import { API_ROUTES } from '@utils/constants'
+import { useAuth } from '@hooks/useAuth'
 
 const IndexPage = () => {
-  const { userId, authenticated } = useAuthenticated()
+  const { userId, authenticated } = useAuth()
   const url = authenticated ? '/profile' : '/login'
   //TODO: replace by context
   const [me, setMe] = useState(null)

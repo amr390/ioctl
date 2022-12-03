@@ -89,7 +89,7 @@ const RegularLoginForm: FC = (): ReactJSXElement => {
   const handleLogin = async () => {
     const isLoggedIn = await authService.login({ username, password })
     if (isLoggedIn) {
-      router.replace('/profile')
+      router.replace('/users')
     }
   }
 

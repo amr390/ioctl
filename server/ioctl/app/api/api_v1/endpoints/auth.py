@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import uuid
 from typing import Any
 
 from fastapi import APIRouter, Body, Cookie, Depends, HTTPException
@@ -52,38 +53,36 @@ def login_access_token(
     if refresh_token is not None:
         token_still_valid = refresh_token.validity_timestamp > current_timestamp
 
-    if refresh_token is not None and token_still_valid:
-        refresh_token_id = refresh_token
-    else:
+    if refresh_token is None or not token_still_valid:
         if refresh_token is not None and token_still_valid is False:
             delete_token(db, token_id=refresh_token.id)
         seconds_till_expiration = settings.REFRESH_TOKEN_EXPIRE_MINUTES * 60
         new_token_data = schemas.TokenCreate(
-            id=1,
+            id=str(uuid.uuid4()),
             user_id=user.id,
             validity_timestamp=current_timestamp * seconds_till_expiration,
         )
         refresh_token = create_refresh_token(db, new_token_data)
 
-    seconds_till_expiration = settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
-    cookie_token_expiration = current_timestamp + seconds_till_expiration
-    cookie_token_expiration_in_ms = cookie_token_expiration * 1000
-
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(user=user, expires_delta=access_token_expires)
+    access_token_expires_ms = (
+        current_timestamp + settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60 * 1000
+    )
 
     response = JSONResponse(
         content={
             "access_token": access_token,
             "token_type": "bearer",
-            "token_expiry": seconds_till_expiration,
+            "token_expiry": access_token_expires_ms,
         }
     )
 
+    refresh_token_expires = settings.REFRESH_TOKEN_EXPIRE_MINUTES * 60 * 1000
     response.set_cookie(
-        key="ioctl-rt",
+        key="ioctl_rt",
         value=refresh_token.id,
-        expires=cookie_token_expiration_in_ms,
+        expires=refresh_token_expires,
         httponly=True,
     )
 
@@ -91,13 +90,13 @@ def login_access_token(
 
 
 # login/refresh
-@router.post("/auth/refresh", response_model=schemas.Token)
+@router.get("/auth/refresh", response_model=schemas.Token)
 def refresh_token(
-    refresh_token: int = Cookie(None, description="Refresh token Id"),
     db: Session = Depends(deps.get_db),
+    ioctl_rt: int = Cookie(None, description="Refresh token Id"),
 ):
 
-    tokenFromDb = get_existing_refresh_token_by_id(db, refresh_token)
+    tokenFromDb = get_existing_refresh_token_by_id(db, ioctl_rt)
 
     if tokenFromDb is None:
         raise HTTPException(

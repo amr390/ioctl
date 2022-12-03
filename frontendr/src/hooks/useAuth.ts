@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { authService } from '@services/authService'
 import { APP_ROUTES } from '@utils/constants'
 
-export const useAuthenticated = () => {
+export const useAuth = () => {
   const router = useRouter()
   const [userId, setUserId] = useState('')
   const [authenticated, setAuthenticated] = useState(false)

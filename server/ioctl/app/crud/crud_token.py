@@ -11,8 +11,8 @@ class CRUDToken(CRUDBase[RefreshToken, TokenCreate, TokenUpdate]):
     def get_by_user_id(self, db: Session, *, user_id: int) -> Optional[RefreshToken]:
         return db.query(RefreshToken).filter(RefreshToken.user_id == user_id).first()
 
-    def get(self, db: Session, *, id: int) -> Optional[RefreshToken]:
-        return db.query(RefreshToken).filter(RefreshToken.id == id).one()
+    def get(self, db: Session, *, id: str) -> Optional[RefreshToken]:
+        return db.query(RefreshToken).filter(RefreshToken.id == id).one_or_none()
 
     def create(self, db: Session, *, obj_in: TokenCreate) -> RefreshToken:
         obj_in_data = jsonable_encoder(obj_in)

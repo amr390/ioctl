@@ -28,6 +28,7 @@ def get_db() -> Generator:
     finally:
         db.close()
 
+
 def get_current_user(
     security_scopes: SecurityScopes,
     db: Session = Depends(get_db),

@@ -14,7 +14,7 @@ class TokenPayload(BaseModel):
 
 
 class TokenCreate(BaseModel):
-    id: int
+    id: str
     user_id: int
     validity_timestamp: int
 

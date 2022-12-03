@@ -1,21 +1,26 @@
+import axios from '@utils/axios'
 import { API_ROUTES } from '@utils/constants'
 import { decode, JwtPayload } from 'jsonwebtoken'
 import { ICredentials, IToken } from 'models'
 import { toast } from 'react-hot-toast'
 
 class AuthService {
+  private auth: string | undefined = undefined
+
   public login = async (credentials: ICredentials): Promise<boolean> => {
     return new Promise((resolve, reject) =>
-      fetch(`${API_ROUTES.SIGN_IN}`, {
-        method: 'POST',
-        headers: new Headers([
-          ['content-type', 'application/x-www-form-urlencoded'],
-        ]),
-        body: new URLSearchParams({ ...credentials }),
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          this.storeToken(json)
+      axios
+        .post(
+          `${API_ROUTES.SIGN_IN}`,
+          new URLSearchParams({ ...credentials }),
+          {
+            headers: {
+              'content-type': 'application/x-www-form-urlencoded',
+            },
+          }
+        )
+        .then((response) => {
+          this.auth = response.data
           toast.success(`Welcome ${credentials.username}`)
           resolve(true)
         })
@@ -51,28 +56,16 @@ class AuthService {
   }
 
   public getToken = (): string => {
-    const storedToken: string = localStorage.getItem('token') || ''
-    return storedToken
+    return this.auth || ''
   }
 
   private getDecodedToken = (): JwtPayload => {
-    if (typeof window !== 'undefined') {
-      const storedToken: string = localStorage.getItem('token') || ''
-
-      // it should be always a JwtPayload
-      const token: JwtPayload = decode(storedToken) as JwtPayload
-      return token
-    }
-    return { key: '' }
+    // it should be always a JwtPayload
+    const token: JwtPayload = decode(this.auth || '') as JwtPayload
+    return token
   }
 
-  private storeToken = (token: IToken): void => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('token', token['access_token'])
-    }
-  }
-
-  private cleanTokenInformation = (): void => localStorage.removeItem('token')
+  private cleanTokenInformation = (): void => (this.auth = undefined)
 }
 
 export const authService = new AuthService()
