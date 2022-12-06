@@ -1,26 +1,24 @@
 import { useEffect, useState } from 'react'
-import axios from '@utils/axios'
 import { API_ROUTES } from '@utils/constants'
 import { AxiosResponse } from 'axios'
-import useRefreshToken from '@hooks/useRefreshToken'
+import useAxiosPrivate from '@hooks/useAxiosPrivate'
+import { IUser } from '@models'
 
 export default function Users() {
-  const [users, setUsers] = useState([])
-  const refresh = useRefreshToken()
+  const [users, setUsers] = useState([] as IUser[])
+  const axiosPrivate = useAxiosPrivate()
 
   useEffect(() => {
-    let isMounted = true
     const controller = new AbortController()
 
     const getUsers = async () => {
       try {
-        const response: AxiosResponse = await axios.get(API_ROUTES.USER_CRUD, {
-          withCredentials: true,
+        const response: AxiosResponse = await axiosPrivate.get(API_ROUTES.USER_CRUD, {
           signal: controller.signal,
         })
         console.log('user list: ', response.data)
 
-        isMounted && setUsers(response.data)
+        setUsers(response.data)
       } catch (err) {
         console.error(err)
       }
@@ -30,7 +28,6 @@ export default function Users() {
 
     return () => {
       controller.abort() // abort any requests on going
-      isMounted = false // don't let set any state once the component is unmountejjkk
     }
   }, [])
   return (
@@ -38,9 +35,8 @@ export default function Users() {
       <h2>User list</h2>
       <article>
         {users?.length &&
-          users.map((user, idx) => <div key={idx}> {user}</div>)}
+          users.map((user, idx) => <div key={idx}> {user.email}</div>)}
       </article>
-      <button onClick={() => refresh()}> Refresh</button>
     </>
   )
 }

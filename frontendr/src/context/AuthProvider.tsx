@@ -1,8 +1,9 @@
+import { IToken } from '@models'
 import { createContext, ReactNode, useState } from 'react'
 
 type AuthState = {
-  auth: string,
-  setAuth: (auth: string)=>void
+  auth: IToken,
+  setAuth: (auth: IToken)=>void
 }
 
 interface IProps {
@@ -12,7 +13,7 @@ interface IProps {
 const AuthContext = createContext<AuthState>({} as AuthState)
 
 export const AuthProvider = ({ children }: IProps) => {
-  const [auth, setAuth] = useState<string>("")
+  const [auth, setAuth] = useState<IToken>({} as IToken)
   return (
     <AuthContext.Provider value={{auth, setAuth}}>
       {children}

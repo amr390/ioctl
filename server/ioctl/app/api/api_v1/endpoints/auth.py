@@ -90,10 +90,10 @@ def login_access_token(
 
 
 # login/refresh
-@router.get("/auth/refresh", response_model=schemas.Token)
+@router.post("/auth/refresh", response_model=schemas.Token)
 def refresh_token(
     db: Session = Depends(deps.get_db),
-    ioctl_rt: int = Cookie(None, description="Refresh token Id"),
+    ioctl_rt: str = Cookie(None, description="Refresh token Id"),
 ):
 
     tokenFromDb = get_existing_refresh_token_by_id(db, ioctl_rt)

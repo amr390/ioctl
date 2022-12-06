@@ -1,8 +1,11 @@
+import AuthContext from '@context/AuthProvider'
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace'
-import { authService } from '@services/authService'
+import useAxiosPrivate from '@hooks/useAxiosPrivate'
+import { API_ROUTES } from '@utils/constants'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { FC, useState } from 'react'
+import { FC, useContext, useState } from 'react'
+import toast from 'react-hot-toast'
 
 export default function Login() {
   return (
@@ -85,11 +88,32 @@ const RegularLoginForm: FC = (): ReactJSXElement => {
   const [password, setPassword] = useState('')
 
   const router = useRouter()
+  const { auth, setAuth } = useContext(AuthContext)
+  const axiosPrivate = useAxiosPrivate()
 
   const handleLogin = async () => {
-    const isLoggedIn = await authService.login({ username, password })
-    if (isLoggedIn) {
-      router.replace('/users')
+    try {
+      const response = await axiosPrivate.post(
+        `${API_ROUTES.SIGN_IN}`,
+        new URLSearchParams({ username, password }),
+        {
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded',
+          },
+        }
+      )
+
+      if (response.data) {
+        toast.success(`welcome ${username}`)
+      }
+
+      setAuth(response.data)
+
+      if (response) {
+        router.replace('/users')
+      }
+    } catch (err) {
+      toast.error(`Failed to authenticate: ${err}`)
     }
   }
 

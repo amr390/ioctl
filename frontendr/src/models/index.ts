@@ -1,9 +1,10 @@
 export interface IUser {
-  username: string
-  timestamp: number
-  isLoggedIn: boolean
-  isExpired: boolean
-}
+  id: number
+  email: string
+  full_name?: string
+  is_active: boolean
+  is_superuser: boolean
+ }
 
 export interface ICredentials {
   username: string
