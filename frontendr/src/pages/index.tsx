@@ -1,12 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { Layout } from '../components/verde/_layout'
 import { useAuth } from '@hooks/useAuth'
 
 const IndexPage = () => {
-  const { userId, authenticated } = useAuth()
-  const url = authenticated ? '/profile' : '/login'
+  const auth = useAuth()
+  const url = auth ? '/profile' : '/login'
   //TODO: replace by context
   const [me, setMe] = useState(null)
 
@@ -22,7 +21,7 @@ const IndexPage = () => {
 
   /* toast(authenticated ? `user is authenticated: ${userId}` : 'Not yet authenticated') */
   return (
-    <Layout>
+    <>
       <section
         className='flex flex-1 flex-col justify-center items-center'
         style={{
@@ -50,7 +49,7 @@ const IndexPage = () => {
           Start your trip...
         </Link>
       </section>
-    </Layout>
+    </>
   )
 }
 

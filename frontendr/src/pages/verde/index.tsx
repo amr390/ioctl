@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
-import { Hero } from '@components/landing/hero/Hero'
-import { Layout } from '@components/verde/_layout'
+import { Hero } from '@components/starterkit/landing/hero/Hero'
+import { Layout } from '@components/common/_layout'
 
 const IndexPage = () => {
   return (
