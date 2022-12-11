@@ -132,7 +132,17 @@ def refresh_token(
     return response
 
 
-# login/test-token
+# auth/register
+@router.post("/auth/register", response_model=schemas.User)
+def test_token() -> Any:
+    """
+    Test access Token
+    """
+
+    return True
+
+
+# auth/test-token
 @router.post("/auth/validate", response_model=schemas.User)
 def test_token() -> Any:
     """
