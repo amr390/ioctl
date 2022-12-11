@@ -2,7 +2,7 @@
 const endpoint = 'http://localhost:8000'
 
 export const API_ROUTES = {
-  SIGN_UP:  `${endpoint}/api/v1/auth/signup`,
+  SIGN_UP:  `${endpoint}/api/v1/users/open`,
   SIGN_IN:  `${endpoint}/api/v1/auth/login`,
   SIGN_REFRESH:  `${endpoint}/api/v1/auth/refresh`,
   SIGN_OUT: `${endpoint}/api/v1/auth/signuot`,

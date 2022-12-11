@@ -1,7 +1,18 @@
 import Image from 'next/image'
-import React, { Dispatch } from 'react'
+import React, { Dispatch, useEffect, useState } from 'react'
 
 import { motion } from 'framer-motion'
+import axios from '@utils/axios'
+import { API_ROUTES } from '@utils/constants'
+import toast from 'react-hot-toast'
+import { useRouter } from 'next/router'
+
+const credentials = {
+  email: '',
+  full_name: '',
+  password: '',
+  repassword: '',
+}
 
 const SocialLogin = () => {
   return (
@@ -70,12 +81,34 @@ const SocialLogin = () => {
   )
 }
 
-const LoginButtons = (props: { setLoggin: Dispatch<boolean> }) => {
+const RegisterButtons = (props: { setLoggin: Dispatch<boolean> }) => {
+  const router = useRouter()
+  const handleRegistration = async () => {
+    try {
+      const response = await axios.post(`${API_ROUTES.SIGN_UP}`, credentials, {
+        headers: {
+          'content-type': 'application/json',
+        },
+      })
+
+      if (response.data) {
+        toast.success(`New User ${credentials.email} registrated`)
+      }
+
+      if (response) {
+        router.replace('/users')
+      }
+    } catch (err) {
+      toast.error(`Failed to authenticate: ${err}`)
+    }
+  }
+
   return (
     <div className='text-center lg:text-left'>
       <button
         type='button'
         className='inline-block px-7 py-3 bg-gray-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'
+        onClick={handleRegistration}
       >
         Register
       </button>
@@ -108,6 +141,18 @@ const ImageLogin = () => {
 }
 
 const InputFields = () => {
+  const [validPassword, setValidPassword] = useState(true)
+  const repasswordStyle = {
+    success:
+      'form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
+    error:
+      'form-control block w-full px-4 py-2 text-xl font-normal text-red-600 bg-white bg-clip-padding border border-solid border-red-600 rounded transition ease-in-out m-0 focus:text-red-600 focus:bg-white focus:border-red-600 focus:outline-none',
+  }
+
+  const validatePasswords = () => {
+    setValidPassword(credentials.password === credentials.repassword)
+  }
+
   return (
     <>
       {/* <!-- Email input --> */}
@@ -117,6 +162,7 @@ const InputFields = () => {
           className='form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
           id='email-address'
           placeholder='Email address'
+          onChange={(e) => (credentials.email = e.target.value)}
         />
       </div>
 
@@ -127,6 +173,7 @@ const InputFields = () => {
           className='form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
           id='full-name'
           placeholder='Full name'
+          onChange={(e) => (credentials.full_name = e.target.value)}
         />
       </div>
 
@@ -137,6 +184,7 @@ const InputFields = () => {
           className='form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
           id='password'
           placeholder='Password'
+          onChange={(e) => (credentials.password = e.target.value)}
         />
       </div>
 
@@ -144,9 +192,15 @@ const InputFields = () => {
       <div className='mb-6'>
         <input
           type='password'
-          className='form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
+          className={
+            validPassword ? repasswordStyle.success : repasswordStyle.error
+          }
           id='re-password'
-          placeholder='Password'
+          placeholder='Validate Password'
+          onChange={(e) => {
+            credentials.repassword = e.target.value
+            validatePasswords()
+          }}
         />
       </div>
     </>
@@ -185,7 +239,7 @@ const Register = (props: { setLoggin: Dispatch<boolean> }) => {
               </div>
 
               <InputFields />
-              <LoginButtons {...props} />
+              <RegisterButtons {...props} />
             </form>
           </div>
           <ImageLogin />
