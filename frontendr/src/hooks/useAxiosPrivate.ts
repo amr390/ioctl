@@ -1,4 +1,5 @@
 import { axiosPrivate } from '@utils/axios'
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useAuth } from './useAuth'
 import useRefreshToken from './useRefreshToken'
@@ -9,7 +10,10 @@ import useRefreshToken from './useRefreshToken'
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken()
   const { auth } = useAuth()
+  const router = useRouter()
+ 
 
+  /* https://github.com/gitdagray/react_jwt_auth/ */
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
@@ -26,9 +30,12 @@ const useAxiosPrivate = () => {
         const prevRequest = error?.config
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true
-          const newAccessToken = await refresh()
-          prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
+          const newAuth = await refresh()
+          prevRequest.headers['Authorization'] = `Bearer ${newAuth.access_token}`
           return axiosPrivate(prevRequest)
+        }
+        if (error?.response?.status === 400) {
+          router.replace('/login')
         }
         return Promise.reject(error)
       }

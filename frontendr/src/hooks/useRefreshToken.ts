@@ -1,18 +1,21 @@
-import AuthContext from '@context/AuthProvider'
 import { axiosPrivate } from '@utils/axios'
 import { API_ROUTES } from '@utils/constants'
 import { AxiosResponse } from 'axios'
-import { useContext } from 'react'
+import { useAuth } from './useAuth'
 
 const useRefreshToken = () => {
-  const { auth, setAuth } = useContext(AuthContext)
+  const { setAuth } = useAuth()
 
   const refresh = async () => {
     const response: AxiosResponse = await axiosPrivate.post(
       API_ROUTES.SIGN_REFRESH
     )
-    setAuth(response.data)
-    return response.data['access_token']
+    setAuth((prev) => {
+      console.log(JSON.stringify(prev))
+      console.log(response.data.access_token)
+      return { ...prev, accessToken: response.data.access_token }
+    })
+    return response.data
   }
 
   return refresh

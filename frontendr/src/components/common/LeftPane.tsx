@@ -1,4 +1,5 @@
 import { useAuth } from '@hooks/useAuth'
+import Link from 'next/link'
 import React from 'react'
 
 export const LeftPane = () => {
@@ -15,7 +16,9 @@ export const LeftPane = () => {
           <div className='flex relative top-[-10px] w-full h-16 justify-center'>
             <div className='flex flex-row justify-between items-center px-1 border rounded-md w-11/12 bg-black text-white text-center'>
               <span className='text-white text-sm '>Current status</span>
-              <span className={auth.access_token ? signedInStyle : notSignedInStyle}>
+              <span
+                className={auth.access_token ? signedInStyle : notSignedInStyle}
+              >
                 {auth.access_token ? 'SIGNED IN' : 'NOT SIGNED'}
               </span>
             </div>
@@ -25,19 +28,29 @@ export const LeftPane = () => {
           <h2 className='font-bold txt-lg'>Views</h2>
           <div className='flex justify-center w-full'>
             <ul className='bg-white rounded-lg border border-gray-200 w-96 text-gray-900'>
-              <li className='px-6 py-2 border-b border-gray-200 w-full rounded-t-md bg-black text-white'>
-                Profile
-              </li>
-              <li className='px-6 py-2 border-b border-gray-200 w-full'>
-                Dashboard
-              </li>
-              <li className='px-6 py-2 border-b border-gray-200 w-full'>
-                Tasks
-              </li>
-              <li className='px-6 py-2 border-b border-gray-200 w-full'>
-                Admin
-              </li>
-              <li className='px-6 py-2 w-full rounded-b-lg'>Settings</li>
+              <Link href='/profile'>
+                <li className='px-6 py-2 border-b border-gray-200 w-full rounded-t-md bg-black text-white'>
+                  Profile
+                </li>
+              </Link>
+              <Link href='/dashboard'>
+                <li className='px-6 py-2 border-b border-gray-200 w-full cursor-pointer'>
+                  Dashboard
+                </li>
+              </Link>
+              <Link href='/tasks'>
+                <li className='px-6 py-2 border-b border-gray-200 w-full cursor-pointer'>
+                  Tasks
+                </li>
+              </Link>
+              <Link href='/admin'>
+                <li className='px-6 py-2 border-b border-gray-200 w-full cursor-pointer'>
+                  Admin
+                </li>
+              </Link>
+              <Link href='/settings'>
+                <li className='px-6 py-2 w-full rounded-b-lg cursor-pointer'>Settings</li>
+              </Link>
             </ul>
           </div>
         </article>
