@@ -1,9 +1,9 @@
 import { IToken } from '@models'
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, Dispatch, ReactNode, useState } from 'react'
 
 type AuthState = {
   auth: IToken,
-  setAuth: (auth: IToken)=>void
+  setAuth: Dispatch<IToken>
 }
 
 interface IProps {

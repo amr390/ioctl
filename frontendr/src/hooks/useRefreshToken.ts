@@ -1,3 +1,4 @@
+import { IToken } from '@models'
 import { axiosPrivate } from '@utils/axios'
 import { API_ROUTES } from '@utils/constants'
 import { AxiosResponse } from 'axios'
@@ -10,10 +11,10 @@ const useRefreshToken = () => {
     const response: AxiosResponse = await axiosPrivate.post(
       API_ROUTES.SIGN_REFRESH
     )
-    setAuth((prev) => {
+    setAuth((prev: IToken) => {
       console.log(JSON.stringify(prev))
       console.log(response.data.access_token)
-      return { ...prev, accessToken: response.data.access_token }
+      return { ...prev, access_token: response.data.access_token }
     })
     return response.data
   }

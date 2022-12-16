@@ -1,9 +1,35 @@
 import { useAuth } from '@hooks/useAuth'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
+
+interface ItemProps {
+  active?: boolean
+  label: string
+  href: string
+}
+
+const MenuItem = (props: ItemProps) => {
+  return (
+    <Link href={props.href}>
+      <li className='px-6 py-2 border-b border-gray-200 w-full cursor-pointer'>
+        {props.label}
+      </li>
+    </Link>
+  )
+}
 
 export const LeftPane = () => {
   const { auth } = useAuth()
+  const [ items, setItems ] = useState<ItemProps[]>([
+    { label: 'Profile', href: '/profile', active: false },
+    { label: 'Users', href: '/users', active: false },
+    { label: 'Tasks', href: '/tasks', active: false },
+    { label: 'Settings', href: '/settings', active: false },
+  ])
+
+  const handleClick = (e: Event) => {
+    console.log(e.target)
+  }
 
   const signedInStyle =
     'flex justify-center items-center w-20 h-6 rounded-lg text-black text-xs font-semibold bg-yellow-400'
@@ -28,29 +54,9 @@ export const LeftPane = () => {
           <h2 className='font-bold txt-lg'>Views</h2>
           <div className='flex justify-center w-full'>
             <ul className='bg-white rounded-lg border border-gray-200 w-96 text-gray-900'>
-              <Link href='/profile'>
-                <li className='px-6 py-2 border-b border-gray-200 w-full rounded-t-md bg-black text-white'>
-                  Profile
-                </li>
-              </Link>
-              <Link href='/dashboard'>
-                <li className='px-6 py-2 border-b border-gray-200 w-full cursor-pointer'>
-                  Dashboard
-                </li>
-              </Link>
-              <Link href='/tasks'>
-                <li className='px-6 py-2 border-b border-gray-200 w-full cursor-pointer'>
-                  Tasks
-                </li>
-              </Link>
-              <Link href='/admin'>
-                <li className='px-6 py-2 border-b border-gray-200 w-full cursor-pointer'>
-                  Admin
-                </li>
-              </Link>
-              <Link href='/settings'>
-                <li className='px-6 py-2 w-full rounded-b-lg cursor-pointer'>Settings</li>
-              </Link>
+              {items.map((it) => (
+                <MenuItem key={it.label} {...it} />
+              ))}
             </ul>
           </div>
         </article>
