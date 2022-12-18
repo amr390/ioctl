@@ -1,17 +1,26 @@
 import { useAuth } from '@hooks/useAuth'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { MouseEventHandler, useState } from 'react'
 
 interface ItemProps {
   active?: boolean
   label: string
   href: string
+  first: boolean
+  last: boolean
+  onClick?: MouseEventHandler
 }
 
 const MenuItem = (props: ItemProps) => {
+  const selected = props.active ? 'bg-black text-white' : ''
+  const first = props.first ? 'rounded-t-lg' : ''
+  const last = props.last ? 'rounded-b-lg' : ''
   return (
     <Link href={props.href}>
-      <li className='px-6 py-2 border-b border-gray-200 w-full cursor-pointer'>
+      <li
+        onClick={props.onClick}
+        className={`px-6 py-2 border-b border-gray-200 w-full cursor-pointer ${selected} ${first} ${last}`}
+      >
         {props.label}
       </li>
     </Link>
@@ -20,15 +29,21 @@ const MenuItem = (props: ItemProps) => {
 
 export const LeftPane = () => {
   const { auth } = useAuth()
-  const [ items, setItems ] = useState<ItemProps[]>([
-    { label: 'Profile', href: '/profile', active: false },
-    { label: 'Users', href: '/users', active: false },
-    { label: 'Tasks', href: '/tasks', active: false },
-    { label: 'Settings', href: '/settings', active: false },
+  const [items, setItems] = useState<ItemProps[]>([
+    { label: 'Profile', href: '/profile', active: true, first: true, last: false, },
+    { label: 'Users', href: '/users', active: false, first: false, last: false, },
+    { label: 'Tasks', href: '/tasks', active: false, first: false, last: false, },
+    { label: 'Settings', href: '/settings', active: false, first: false, last: true, },
   ])
 
-  const handleClick = (e: Event) => {
-    console.log(e.target)
+  const handleClick = (item: ItemProps) => {
+    items.forEach((it) => (it.active = false))
+    let selected = items.find((it) => it.label === item.label)
+    if (selected) {
+      selected.active = true
+    }
+
+    setItems(items)
   }
 
   const signedInStyle =
@@ -55,7 +70,11 @@ export const LeftPane = () => {
           <div className='flex justify-center w-full'>
             <ul className='bg-white rounded-lg border border-gray-200 w-96 text-gray-900'>
               {items.map((it) => (
-                <MenuItem key={it.label} {...it} />
+                <MenuItem
+                  onClick={() => handleClick(it)}
+                  key={it.label}
+                  {...it}
+                />
               ))}
             </ul>
           </div>
