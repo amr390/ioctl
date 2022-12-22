@@ -1,8 +1,10 @@
 import { useAuth } from '@hooks/useAuth'
+import { useProfile } from '@hooks/useProfile'
 import React from 'react'
 
-export const UserDetail = (props: {}) => {
+export const UserDetail = () => {
   const { auth } = useAuth()
+  const profile = useProfile()
   const style = `flex justify-center items-center w-20 h-6 rounded-lg text-black text-xs font-semibold bg-yellow-${ auth.access_token ? '400' : '300' }`
 
   return (
