@@ -15,7 +15,7 @@ from app.utils import send_new_account_email
 router = APIRouter()
 
 
-@router.get("/", response_model=List[schemas.User])
+@router.get("", response_model=List[schemas.User])
 def read_users(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
@@ -34,7 +34,7 @@ def read_users(
     return users
 
 
-@router.post("/", response_model=schemas.User)
+@router.post("", response_model=schemas.User)
 def create_user(
     *,
     db: Session = Depends(deps.get_db),
@@ -85,7 +85,12 @@ def update_user_me(
 @router.get("/me", response_model=schemas.User)
 def read_user_me(
     db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: models.User = Security(
+        deps.get_current_active_user,
+        scopes=[
+            RoleChecker.ADMIN["name"],
+        ],
+    ),
 ) -> Any:
     """
     Get current user.

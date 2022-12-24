@@ -19,9 +19,8 @@ export const useProfile = () => {
           }
         )
         console.log('user details: ', response.data)
-        setProfile((prev) => {
-          const data = response.data
-          return { ...prev, data }
+        setProfile((prev: any) => {
+          return {...prev, ...response.data }
         })
       } catch (err) {
         console.error(err)
@@ -33,7 +32,7 @@ export const useProfile = () => {
     return () => {
       controller.abort() // abort any requests on going
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return profile
