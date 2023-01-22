@@ -11,6 +11,7 @@ import typing
 # if typing.TYPE_CHECKING:
 from .role import Role  # noqa: F401
 from .customer import Customer  # noqa: F401
+from .team import Team
 
 
 logging.basicConfig(level=logging.INFO)
@@ -24,6 +25,13 @@ user_roles_table = Table(
     Column("role_id", ForeignKey("role.id")),
 )
 
+user_teams_table = Table(
+    "user_teams",
+    Base.metadata,
+    Column("user_id", ForeignKey("user.id")),
+    Column("team_id", ForeignKey("team.id")),
+)
+
 
 class User(Base):
     id = Column(Integer, primary_key=True, index=True)
@@ -35,3 +43,4 @@ class User(Base):
     token = Column(VARCHAR(255), index=True)
     profile = relationship("Customer", back_populates="credentials")
     roles = relationship("Role", secondary=user_roles_table)
+    teams = relationship("Team", secondary=user_teams_table, back_populates='users')

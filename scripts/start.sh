@@ -1,3 +1,6 @@
 #!/bin/zsh
+# shopt -s expand_aliases
 
-ioctl && cd server/ioctl && uvicorn app.ioctl.main:app --reload
+$ioctl
+
+PYTHONPATH=. python app/main.py
