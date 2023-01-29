@@ -13,6 +13,16 @@ from app.core.role_checker import RoleChecker
 from app.utils import send_new_account_email
 
 router = APIRouter()
+user_not_exists = HTTPException(
+    status_code=404,
+    detail="The user with this username does not exist in the system",
+)
+
+
+user_already_exists = HTTPException(
+    status_code=400,
+    detail="The user with this username already exists in the system",
+)
 
 
 @router.get("", response_model=List[schemas.User])
@@ -46,10 +56,7 @@ def create_user(
     """
     user = crud.user.get_by_email(db, email=user_in.email)
     if user:
-        raise HTTPException(
-            status_code=400,
-            detail="The user with this username already exists in the system.",
-        )
+        raise user_not_exists
     user = crud.user.create(db, obj_in=user_in)
     if settings.EMAILS_ENABLED and user_in.email:
         send_new_account_email(
@@ -116,10 +123,7 @@ def create_user_open(
         )
     user = crud.user.get_by_email(db, email=email)
     if user:
-        raise HTTPException(
-            status_code=400,
-            detail="The user with this username already exists in the system",
-        )
+        raise user_already_exists
     user_in = schemas.UserCreate(password=password, email=email, full_name=full_name)
     user = crud.user.create(db, obj_in=user_in)
     return user
@@ -138,9 +142,7 @@ def read_user_by_id(
     if user == current_user:
         return user
     if not crud.user.is_superuser(current_user):
-        raise HTTPException(
-            status_code=400, detail="The user doesn't have enough privileges"
-        )
+        raise user_already_exists
     return user
 
 
@@ -157,9 +159,36 @@ def update_user(
     """
     user = crud.user.get(db, id=user_id)
     if not user:
-        raise HTTPException(
-            status_code=404,
-            detail="The user with this username does not exist in the system",
-        )
+        raise user_not_exists
     user = crud.user.update(db, db_obj=user, obj_in=user_in)
     return user
+
+
+@router.get("/{user_id}/activate/{token}", response_model=schemas.User)
+def activate_user(
+    *,
+    db: Session = Depends(deps.get_db),
+    user_id: int,
+    token: str,
+) -> Any:
+    user: models.User = crud.user.get(db=db, id=user_id)
+    if not user:
+        raise user_not_exists
+    if user.is_active:
+        raise user_already_exists
+    organization = crud.organization.create_default(db=db, owner_uid=user.id)
+    crud.team.create_default(db=db, org_id=organization.id, user=user)
+    user: models.User = crud.user.activate(db, user_id, token)
+    return user
+
+
+@router.get("/{user_email}/resendToken", response_model=schemas.User)
+def resend_token(
+    *,
+    db: Session = Depends(deps.get_db),
+    user_email: str,
+) -> Any:
+    user: models.User = crud.user.get_by_email(user_email)
+    if settings.EMAILS_ENABLED and user:
+        send_new_account_email(email_to=user_email, username=user_email)
+    return crud.user.activate(db, user_id, token)

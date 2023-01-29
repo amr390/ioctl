@@ -35,5 +35,6 @@ class User(Base):
     is_active = Column(Boolean(), default=True)
     is_superuser = Column(Boolean(), default=False)
     token = Column(VARCHAR(255), index=True)
+    hunter = Column(VARCHAR(63), default='SOLO')
     profile = relationship("Customer", back_populates="credentials")
     roles = relationship("Role", secondary=user_roles_table)

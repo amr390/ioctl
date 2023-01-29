@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.schema import Table
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
@@ -19,7 +20,7 @@ user_teams_table = Table(
 class Team(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
-    description = Column(String, index=True)
+    description = Column(String)
     organization = Column(Integer, ForeignKey("organization.id"))
     users = relationship('User', secondary=user_teams_table, backref="users")
 

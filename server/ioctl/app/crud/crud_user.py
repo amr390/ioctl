@@ -1,3 +1,4 @@
+import uuid
 from typing import Any, Dict, Optional, Union
 from pydantic import EmailStr
 from sqlalchemy.orm import Session
@@ -21,6 +22,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             hashed_password=get_password_hash(obj_in.password),
             full_name=obj_in.full_name,
             is_superuser=obj_in.is_superuser,
+            token=uuid.uuid4(),
         )
         db.add(db_obj)
         db.commit()
@@ -40,7 +42,9 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             update_data["hashed_password"] = hashed_password
         return super().update(db, db_obj=db_obj, obj_in=update_data)
 
-    def authenticate(self, db: Session, *, email: EmailStr, password: str) -> Optional[User]:
+    def authenticate(
+        self, db: Session, *, email: EmailStr, password: str
+    ) -> Optional[User]:
         user = self.get_by_email(db, email=email)
         if not User:
             return None
@@ -53,6 +57,17 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
     def is_superuser(self, user: User) -> bool:
         return user.is_superuser
+
+    def activate(self, db: Session, id: int, activation_token: str) -> Optional[User]:
+        user: User = self.get(db=db, id=id)
+        if user.token == activation_token:
+            user.is_active = True
+            user.token = None
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+            return user
+        return None
 
 
 user = CRUDUser(User)

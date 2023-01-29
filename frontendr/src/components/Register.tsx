@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import React, { Dispatch, useEffect, useState } from 'react'
+import React, { Dispatch, useState } from 'react'
 
 import { motion } from 'framer-motion'
 import axios from '@utils/axios'
@@ -12,6 +12,7 @@ const credentials = {
   full_name: '',
   password: '',
   repassword: '',
+  hunterType: '',
 }
 
 const SocialLogin = () => {
@@ -142,6 +143,7 @@ const ImageLogin = () => {
 
 const InputFields = () => {
   const [validPassword, setValidPassword] = useState(true)
+  const [hunterType, setHunterType] = useState<string>('SOLO')
   const repasswordStyle = {
     success:
       'form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none',
@@ -202,6 +204,21 @@ const InputFields = () => {
             validatePasswords()
           }}
         />
+      </div>
+
+      <div className='mb-6'>
+        <select
+          className={repasswordStyle.success}
+          value={hunterType}
+          onChange={(e) => {
+            credentials.hunterType = e.target.value
+            setHunterType(credentials.hunterType)
+          }}
+        >
+          <option value={'SOLO'}>Solo</option>
+          <option value={'CLANLEADER'}>Clan leader</option>
+          <option value={'CLANJOINER'}>Clan joiner</option>
+        </select>
       </div>
     </>
   )
