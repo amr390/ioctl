@@ -2,8 +2,12 @@ export interface IUser {
   id: number
   email: string
   full_name?: string
-  is_active: boolean
-  is_superuser: boolean
+  phone?: string
+  password?: String
+  repassword?: String
+  hunter?: String
+  is_active?: boolean
+  is_superuser?: boolean
  }
 
 export interface ICredentials {

@@ -1,11 +1,21 @@
+import { IUser } from '@models'
 import { API_ROUTES } from '@utils/constants'
 import { AxiosResponse } from 'axios'
 import { useEffect, useState } from 'react'
 import useAxiosPrivate from './useAxiosPrivate'
 
+const emptyProfile: any = {
+  id: -1,
+  full_name: '',
+  email: '',
+  phone: '',
+  password: '',
+  repassword: '',
+}
+
 export const useProfile = () => {
   const axiosPrivate = useAxiosPrivate()
-  const [profile, setProfile] = useState<any>({})
+  const [profile, setProfile] = useState<IUser>(emptyProfile)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -20,7 +30,7 @@ export const useProfile = () => {
         )
         console.log('user details: ', response.data)
         setProfile((prev: any) => {
-          return {...prev, ...response.data }
+          return { ...prev, ...response.data }
         })
       } catch (err) {
         console.error(err)
