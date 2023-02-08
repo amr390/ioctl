@@ -4,7 +4,7 @@ import { IUser } from '@models'
 import EditIcon from '@mui/icons-material/Edit'
 import UserApi from '@services/users'
 import { AxiosInstance, AxiosResponse } from 'axios'
-import { useEffect, useState } from 'react'
+import { SyntheticEvent, useEffect, useState } from 'react'
 
 const emptyUser: IUser = {
   id: -1,
@@ -17,9 +17,19 @@ export default function Profile() {
   const axiosPrivate: AxiosInstance = useAxiosPrivate()
   const userApi = UserApi
 
-  const handleChange = (e: any) =>{
-    console.log("typeof e", e);
-    setProfile({ ...profile, [e.target.name]: e.target.value })
+  const handleChange = (e: InputEvent) => {
+    setProfile({ ...profile, [e?.target.id]: e?.target.value })
+  }
+
+  const handlePasswordChange = (e: any) => {
+    const newProfile = { ...profile, [e.target.id]: e.target.value }
+    setValidPassword(newProfile.password === newProfile.repassword)
+
+    setProfile(newProfile)
+  }
+
+  const handleUpdate = () => {
+    userApi.updateMe(axiosPrivate, profile)
   }
 
   useEffect(() => {
@@ -53,10 +63,6 @@ export default function Profile() {
       'focus:outline-none border-b w-full pb-2 border-red-400 placeholder-gray-500 mb-8',
   }
 
-  const validatePasswords = () => {
-    setValidPassword(profile.password === profile.repassword)
-  }
-
   return (
     <div className='w-full h-auto p-4 flex items-center justify-center'>
       <div className='bg-white flex flex-col py-6 px-10 w-full md:max-w-full'>
@@ -70,11 +76,11 @@ export default function Profile() {
               Name
             </label>
             <input
-              id='name'
+              id='full_name'
               type='text'
               className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
               placeholder='Full Name'
-              value={profile.full_name}
+              value={profile.full_name || ''}
               onChange={handleChange}
             />
           </div>
@@ -87,7 +93,7 @@ export default function Profile() {
               type='email'
               className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
               placeholder='Eamil Adress '
-              value={profile.email}
+              value={profile.email || ''}
               onChange={handleChange}
             />
           </div>
@@ -96,10 +102,11 @@ export default function Profile() {
               Phone
             </label>
             <input
+              id='phone'
               type='phone'
               className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
               placeholder='Phone'
-              value={profile.phone}
+              value={profile.phone || ''}
               onChange={handleChange}
             />
           </div>
@@ -112,7 +119,7 @@ export default function Profile() {
               type='text'
               className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
               placeholder='hunter'
-              value={profile.hunter}
+              value={profile.hunter || ''}
               onChange={handleChange}
             />
           </div>
@@ -122,10 +129,11 @@ export default function Profile() {
                 Password
               </label>
               <input
+                id='password'
                 type='password'
                 className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
-                value={profile.password}
-                onChange={handleChange}
+                value={profile.password || ''}
+                onChange={handlePasswordChange}
               />
             </div>
             <div className='flex flex-row gap-4 md:gap-16 w-10/12'>
@@ -140,17 +148,17 @@ export default function Profile() {
                     ? repasswordStyle.success
                     : repasswordStyle.error
                 }
-                value={profile.repassword}
-                onChange={(e) => {
-                  handleChange(e)
-                  validatePasswords()
-                }}
+                value={profile.repassword || ''}
+                onChange={handlePasswordChange}
               />
             </div>
           </div>
 
           <div className='flex justify-center my-6'>
-            <button className=' rounded-md  p-3 w-full sm:w-56   bg-black text-gray-50 text-lg font-semibold '>
+            <button
+              className=' rounded-md  p-3 w-full sm:w-56   bg-black text-gray-50 text-lg font-semibold '
+              onClick={handleUpdate}
+            >
               Update
             </button>
           </div>

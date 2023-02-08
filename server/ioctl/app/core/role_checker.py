@@ -25,7 +25,7 @@ class RoleChecker:
                 detail="Not enough permissions",
                 headers={"WWW-Authenticate": authenticate_value},
             )
-        else:
+        elif len(self.allowed_roles):
             has_permission = False
             for role in user.roles:
                 if role.name in self.allowed_roles:
