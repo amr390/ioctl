@@ -3,9 +3,9 @@ export interface IUser {
   email: string
   full_name?: string
   phone?: string
-  password?: String
-  repassword?: String
-  hunter?: String
+  password?: string
+  repassword?: string
+  hunter?: string
   is_active?: boolean
   is_superuser?: boolean
  }

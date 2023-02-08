@@ -1,14 +1,45 @@
 /* import { APP_ROUTES } from '@utils/constants' */
-import { useProfile } from '@hooks/useProfile'
+import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import { IUser } from '@models'
 import EditIcon from '@mui/icons-material/Edit'
-import { useState } from 'react'
+import UserApi from '@services/users'
+import { AxiosInstance, AxiosResponse } from 'axios'
+import { useEffect, useState } from 'react'
 
-
+const emptyUser: IUser = {
+  id: -1,
+  email: '',
+}
 
 export default function Profile() {
   const [validPassword, setValidPassword] = useState<boolean>(true)
-  const profile = useProfile();
+  const [profile, setProfile] = useState<IUser>(emptyUser)
+  const axiosPrivate: AxiosInstance = useAxiosPrivate()
+  const userApi = UserApi
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    const getProfile = async () => {
+      try {
+        const response: AxiosResponse = await userApi.getMe(axiosPrivate, {
+          signal: controller.signal,
+        })
+        console.log('user profile: ', response.data)
+
+        setProfile(response.data)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    getProfile()
+
+    return () => {
+      controller.abort() // abort any on going requests
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const repasswordStyle = {
     success:
@@ -38,6 +69,7 @@ export default function Profile() {
               type='text'
               className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
               placeholder='Full Name'
+              value={profile.full_name}
               onChange={(e) => (profile.full_name = e.target.value)}
             />
           </div>
@@ -50,6 +82,7 @@ export default function Profile() {
               type='email'
               className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
               placeholder='Eamil Adress '
+              value={profile.email}
               onChange={(e) => (profile.email = e.target.value)}
             />
           </div>
@@ -61,6 +94,7 @@ export default function Profile() {
               type='phone'
               className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
               placeholder='Phone'
+              value={profile.phone}
               onChange={(e) => (profile.phone = e.target.value)}
             />
           </div>
@@ -73,6 +107,7 @@ export default function Profile() {
               type='text'
               className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
               placeholder='hunter'
+              value={profile.hunter}
               onChange={(e) => (profile.hunter = e.target.value)}
             />
           </div>
@@ -84,6 +119,7 @@ export default function Profile() {
               <input
                 type='password'
                 className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
+                value={profile.password}
                 onChange={(e) => (profile.password = e.target.value)}
               />
             </div>
@@ -99,6 +135,7 @@ export default function Profile() {
                     ? repasswordStyle.success
                     : repasswordStyle.error
                 }
+                value={profile.repassword}
                 onChange={(e) => {
                   profile.repassword = e.target.value
                   validatePasswords()
