@@ -17,6 +17,11 @@ export default function Profile() {
   const axiosPrivate: AxiosInstance = useAxiosPrivate()
   const userApi = UserApi
 
+  const handleChange = (e: any) =>{
+    console.log("typeof e", e);
+    setProfile({ ...profile, [e.target.name]: e.target.value })
+  }
+
   useEffect(() => {
     const controller = new AbortController()
 
@@ -70,7 +75,7 @@ export default function Profile() {
               className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
               placeholder='Full Name'
               value={profile.full_name}
-              onChange={(e) => (profile.full_name = e.target.value)}
+              onChange={handleChange}
             />
           </div>
           <div className='flex flex-row gap-4 md:gap-16 w-full md:w-10/12'>
@@ -83,7 +88,7 @@ export default function Profile() {
               className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
               placeholder='Eamil Adress '
               value={profile.email}
-              onChange={(e) => (profile.email = e.target.value)}
+              onChange={handleChange}
             />
           </div>
           <div className='flex flex-row gap-4 md:gap-16 w-full md:w-10/12'>
@@ -95,7 +100,7 @@ export default function Profile() {
               className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
               placeholder='Phone'
               value={profile.phone}
-              onChange={(e) => (profile.phone = e.target.value)}
+              onChange={handleChange}
             />
           </div>
           <div className='flex flex-row gap-4 md:gap-16 w-full md:w-10/12'>
@@ -108,7 +113,7 @@ export default function Profile() {
               className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
               placeholder='hunter'
               value={profile.hunter}
-              onChange={(e) => (profile.hunter = e.target.value)}
+              onChange={handleChange}
             />
           </div>
           <div className='flex flex-col lg:flex-row gap-4 md:gap-16 w-10/12'>
@@ -120,7 +125,7 @@ export default function Profile() {
                 type='password'
                 className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
                 value={profile.password}
-                onChange={(e) => (profile.password = e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div className='flex flex-row gap-4 md:gap-16 w-10/12'>
@@ -137,7 +142,7 @@ export default function Profile() {
                 }
                 value={profile.repassword}
                 onChange={(e) => {
-                  profile.repassword = e.target.value
+                  handleChange(e)
                   validatePasswords()
                 }}
               />
