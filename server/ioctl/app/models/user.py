@@ -10,8 +10,8 @@ import typing
 
 # if typing.TYPE_CHECKING:
 from .role import Role  # noqa: F401
-from .customer import Customer  # noqa: F401
-# from .team import Team
+from .hunter import Hunter # noqa: F401
+# from .squad import Squad
 
 
 logging.basicConfig(level=logging.INFO)
@@ -36,5 +36,5 @@ class User(Base):
     is_superuser = Column(Boolean(), default=False)
     token = Column(VARCHAR(255), index=True)
     hunter = Column(VARCHAR(63), default='SOLO')
-    profile = relationship("Customer", back_populates="credentials")
+    profile = relationship("Hunter", back_populates="credentials")
     roles = relationship("Role", secondary=user_roles_table)

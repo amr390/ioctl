@@ -27,9 +27,10 @@ sys.path.append(os.path.join(os.getcwd()))
 print(f"sys.path: {sys.path}")
 from app.db.base import Base  # noqa
 from app.models.user import User
-from app.models.customer import Customer
-from app.models.team import Team
-from app.models.organization import Organization
+from app.models.hunter import Hunter
+from app.models.squad import Squad
+from app.models.mission import Mission
+from app.models.clan import Clan
 
 target_metadata = Base.metadata
 

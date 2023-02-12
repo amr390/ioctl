@@ -6,22 +6,22 @@ from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
 
-# if TYPE_CHECKING:
-from .organization import Organization # noqa: 401
+if TYPE_CHECKING:
+    from .user import User # noqa: 401
 
-user_teams_table = Table(
-    "user_teams",
+hunter_squads_table = Table(
+    "hunter_squads",
     Base.metadata,
     Column("user_id", ForeignKey("user.id")),
-    Column("team_id", ForeignKey("team.id")),
+    Column("squad_id", ForeignKey("squad.id")),
 )
 
 
-class Team(Base):
+class Squad(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     description = Column(String)
-    organization = Column(Integer, ForeignKey("organization.id"))
-    users = relationship('User', secondary=user_teams_table, backref="users")
+    organization = Column(Integer, ForeignKey("clan.id"))
+    hunters = relationship('User', secondary=hunter_squads_table, backref="users")
 
     # owner = relationship("User", back_populates="items")

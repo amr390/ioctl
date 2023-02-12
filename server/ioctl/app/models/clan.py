@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from .user import User  # noqa: 401
 
 
-class Organization(Base):
+class Clan(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     description = Column(String)

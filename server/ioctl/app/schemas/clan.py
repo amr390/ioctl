@@ -4,38 +4,38 @@ from pydantic import BaseModel, EmailStr
 
 
 # Shared Properties
-class TeamBase(BaseModel):
+class ClanBase(BaseModel):
     name: Optional[EmailStr] = None
     description: Optional[str] = None
 
-    organization_id: Optional[int] = None
+    owner_uid: Optional[int] = None
 
 
 # Properties to receive via API on creation
-class TeamCreate(TeamBase):
+class ClanCreate(ClanBase):
     name: str
-    organization_id: int
+    owner_uid: int
 
 
 # Properties to receive via API on update
-class TeamUpdate(TeamBase):
+class ClanUpdate(ClanBase):
     pass
 
 
-class TeamInDBBase(TeamBase):
+class ClanInDBBase(ClanBase):
     id: int
     name: str
-    organization_id: int
+    owner_uid: int
 
     class Config:
         orm_mode = True
 
 
 # Additional properties return via API
-class Team(TeamInDBBase):
+class Clan(ClanInDBBase):
     pass
 
 
 # Additional properties stored in DB
-class TeamInDB(TeamInDBBase):
+class ClanInDB(ClanInDBBase):
     pass

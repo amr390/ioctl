@@ -9,9 +9,11 @@ if TYPE_CHECKING:
     from .user import User  # noqa: F401
 
 
-class Customer(Base):
+class Hunter(Base):
     id = Column(Integer, primary_key=True, index=True)
     first_name = Column(String, index=True)
     last_name = Column(String, index=True)
+    email = Column(String, index=True)
+    phone = Column(String)
     user_id = Column(Integer, ForeignKey("user.id"))
     credentials = relationship("User", back_populates="profile")

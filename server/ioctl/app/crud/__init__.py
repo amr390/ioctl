@@ -1,8 +1,10 @@
 from .crud_item import item
 from .crud_user import user
+from .crud_role import role
+from .crud_hunter import hunter
 from .crud_token import token
-from .crud_organization import organization
-from .crud_team import team
+from .crud_clan import clan
+from .crud_squad import squad
 
 # For a new basic set of CRUD operations you could just do
 

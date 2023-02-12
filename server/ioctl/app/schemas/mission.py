@@ -4,7 +4,7 @@ from pydantic import BaseModel, EmailStr
 
 
 # Shared Properties
-class ProjectBase(BaseModel):
+class MissionBase(BaseModel):
     name: Optional[EmailStr] = None
     description: Optional[bool] = False
 
@@ -12,17 +12,17 @@ class ProjectBase(BaseModel):
 
 
 # Properties to receive via API on creation
-class ProjectCreate(ProjectBase):
+class MissionCreate(MissionBase):
     name: str
     owner_uid: int
 
 
 # Properties to receive via API on update
-class ProjectUpdate(ProjectBase):
+class MissionUpdate(MissionBase):
     pass
 
 
-class ProjectInDBBase(ProjectBase):
+class MissionInDBBase(MissionBase):
     id: int
     name: str
     owner_uid: int
@@ -32,10 +32,10 @@ class ProjectInDBBase(ProjectBase):
 
 
 # Additional properties return via API
-class Project(ProjectInDBBase):
+class Mission(MissionInDBBase):
     pass
 
 
 # Additional properties stored in DB
-class ProjectInDB(ProjectInDBBase):
+class MissionInDB(MissionInDBBase):
     pass
