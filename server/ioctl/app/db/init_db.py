@@ -32,7 +32,6 @@ def init_db(db: Session) -> None:
         )
         role_head = crud.role.create(db, obj_in=role_in)  # noqa: F841
         user.roles.append(role_head)
-        crud.user.update(db=db, db_obj=user, obj_in={})
 
     role_player = crud.role.get_by_name(db, name="PLAYER")
     if not role_player:
@@ -41,4 +40,8 @@ def init_db(db: Session) -> None:
         )
         role_player = crud.role.create(db, obj_in=role_in)  # noqa: F841
         user.roles.append(role_player)
-        crud.user.update(db=db, db_obj=user, obj_in={})
+
+    db.add_all([user, role_head, role_player])
+    db.commit()
+
+
