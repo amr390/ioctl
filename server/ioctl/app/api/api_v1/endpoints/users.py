@@ -33,7 +33,7 @@ def read_users(
     current_user: models.User = Security(
         deps.get_current_active_user,
         scopes=[
-            RoleChecker.ADMIN["name"],
+            RoleChecker.HEAD["name"],
         ],
     ),
 ) -> Any:
@@ -102,7 +102,7 @@ def read_user_me(
     current_user: models.User = Security(
         deps.get_current_active_user,
         scopes=[
-            RoleChecker.ADMIN["name"],
+            RoleChecker.HEAD["name"],
         ],
     ),
 ) -> Any:

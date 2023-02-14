@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MouseEventHandler, useState } from 'react'
+import { MouseEventHandler, useEffect, useState } from 'react'
 
 interface ItemProps {
   active?: boolean
@@ -11,9 +11,15 @@ interface ItemProps {
 }
 
 const MenuItem = (props: ItemProps) => {
-  const selected = props.active ? 'bg-black text-white' : ''
+  let selected = props.active ? 'bg-black text-white' : ''
   const first = props.first ? 'rounded-t-lg' : ''
   const last = props.last ? 'rounded-b-lg' : ''
+  const setSelected = (style: string)=> selected = style
+
+  useEffect(()=> { 
+    setSelected(window.location.pathname === props.href ? 'bg-black text-white' : '')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return (
     <Link href={props.href}>
       <li
@@ -28,21 +34,11 @@ const MenuItem = (props: ItemProps) => {
 
 const Menu = () => {
   const [items, setItems] = useState<ItemProps[]>([
-    { label: 'Start', href: '/', active: true, first: true, last: false, },
+    { label: 'Start', href: '/', active: true, first: true, last: false },
     { label: 'Users', href: '/users', active: false, first: false, last: false, },
     { label: 'Profile', href: '/profile', active: false, first: false, last: false, },
     { label: 'Settings', href: '/settings', active: false, first: false, last: true, },
   ])
-
-  const handleClick = (item: ItemProps) => {
-    items.forEach((it) => (it.active = false))
-    let selected = items.find((it) => it.label === item.label)
-    if (selected) {
-      selected.active = true
-    }
-
-    setItems(items)
-  }
 
   return (
     <article className='flex flex-col p-2 w-full items-center rounded-sm'>
@@ -50,7 +46,7 @@ const Menu = () => {
       <div className='flex justify-center w-full'>
         <ul className='bg-white rounded-lg border border-gray-200 w-96 text-gray-900'>
           {items.map((it) => (
-            <MenuItem onClick={() => handleClick(it)} key={it.label} {...it} />
+            <MenuItem key={it.label} {...it} />
           ))}
         </ul>
       </div>

@@ -53,9 +53,13 @@ class RoleChecker:
         "name": "ACCOUNT_MANAGER",
         "description": "Day to Day Administrator of Events For an Account",
     }
-    ADMIN = {
-        "name": "ADMIN",
+    HEAD = {
+        "name": "HEAD",
         "description": "Admin of Application Ecosystem",
+    }
+    PLAYER = {
+        "name": "PLAYER",
+        "description": "Regular egghunter",
     }
     SUPER_ADMIN = {
         "name": "SUPER_ADMIN",
