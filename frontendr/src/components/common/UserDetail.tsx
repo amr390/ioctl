@@ -4,7 +4,7 @@ import React from 'react'
 
 export const UserDetail = () => {
   const { auth } = useAuth()
-  const profile = useProfile()
+  const {profile} = useProfile()
   const style = `flex justify-center items-center w-20 h-6 rounded-lg text-sm font-semibold ${auth.access_token ? 'bg-yellow-400 text-black' : 'bg-gray-300 text-white' }`
 
 

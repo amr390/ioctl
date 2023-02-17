@@ -1,21 +1,12 @@
-import { IUser } from '@models'
+import AuthContext from '@context/AuthProvider'
 import { API_ROUTES } from '@utils/constants'
 import { AxiosResponse } from 'axios'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import useAxiosPrivate from './useAxiosPrivate'
-
-const emptyProfile: any = {
-  id: -1,
-  full_name: '',
-  email: '',
-  phone: '',
-  password: '',
-  repassword: '',
-}
 
 export const useProfile = () => {
   const axiosPrivate = useAxiosPrivate()
-  const [profile, setProfile] = useState<IUser>(emptyProfile)
+  const { profile, setProfile } = useContext(AuthContext)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -45,5 +36,5 @@ export const useProfile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return profile
+  return { profile, setProfile }
 }

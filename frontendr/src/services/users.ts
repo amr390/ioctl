@@ -9,7 +9,8 @@ const getMe = async (axios: AxiosInstance, opts: AxiosRequestConfig): Promise<Ax
 }
 const updateMe = async (axios: AxiosInstance, user: IUser) => {
   const headers = { headers: { 'content-type': 'application/json', }}
-  return axios.put(`${API_ROUTES.USER_ME_PUT}`, user, headers)
+  const response =  await axios.put(`${API_ROUTES.USER_ME_PUT}`, user, headers)
+  return response.data
 }
 
 const list = async (axios: AxiosInstance, opts: AxiosRequestConfig): Promise<AxiosResponse> => {
