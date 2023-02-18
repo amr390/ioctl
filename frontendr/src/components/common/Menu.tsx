@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { MouseEventHandler, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { MouseEventHandler, useState } from 'react'
 
 interface ItemProps {
   active?: boolean
@@ -11,15 +12,12 @@ interface ItemProps {
 }
 
 const MenuItem = (props: ItemProps) => {
-  let selected = props.active ? 'bg-black text-white' : ''
   const first = props.first ? 'rounded-t-lg' : ''
   const last = props.last ? 'rounded-b-lg' : ''
-  const setSelected = (style: string)=> selected = style
+  const router = useRouter();
+  let selected = router.asPath == props.href ? 'bg-black text-white' : ''
 
-  useEffect(()=> { 
-    setSelected(window.location.pathname === props.href ? 'bg-black text-white' : '')
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+
   return (
     <Link href={props.href}>
       <li

@@ -178,7 +178,7 @@ def activate_user(
     user_id: int,
     token: str,
 ) -> Any:
-    user: models.User = crud.user.get(db=db, id=user_id)
+    user: models.User | None = crud.user.get(db=db, id=user_id)
     if not user:
         raise user_not_exists
     if user.is_active:
