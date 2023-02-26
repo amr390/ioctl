@@ -1,25 +1,19 @@
 /* import { APP_ROUTES } from '@utils/constants' */
-import AuthContext from '@context/AuthProvider'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import { useProfile } from '@hooks/useProfile'
 import { IUser } from '@models'
 import EditIcon from '@mui/icons-material/Edit'
 import UserApi from '@services/users'
 import { AxiosInstance, AxiosResponse } from 'axios'
-import { SyntheticEvent, useContext, useEffect, useState } from 'react'
-
-const emptyUser: IUser = {
-  id: -1,
-  email: '',
-}
+import { useEffect, useState } from 'react'
 
 export default function Profile() {
   const [validPassword, setValidPassword] = useState<boolean>(true)
-  const {profile, setProfile} = useProfile()
+  const { profile, setProfile } = useProfile()
   const axiosPrivate: AxiosInstance = useAxiosPrivate()
   const userApi = UserApi
 
-  const handleChange = (e: InputEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProfile({ ...profile, [e?.target.id]: e?.target.value })
   }
 

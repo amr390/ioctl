@@ -1,4 +1,5 @@
 import AuthContext from '@context/AuthProvider'
+import { IUser } from '@models'
 import { API_ROUTES } from '@utils/constants'
 import { AxiosResponse } from 'axios'
 import { useContext, useEffect } from 'react'
@@ -20,15 +21,15 @@ export const useProfile = () => {
           }
         )
         console.log('user details: ', response.data)
-        setProfile((prev: any) => {
-          return { ...prev, ...response.data }
+        setProfile((prev: IUser): IUser => {
+          return { ...prev, ...response.data as IUser }
         })
       } catch (err) {
         console.error(err)
       }
     }
 
-    getUserProfile()
+    (async ()=> await getUserProfile())();
 
     return () => {
       controller.abort() // abort any requests on going

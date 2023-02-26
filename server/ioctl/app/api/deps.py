@@ -50,7 +50,7 @@ def get_current_user(
             )
         token_data = schemas.TokenPayload(**payload)
     except (jwt.JWTError, ValidationError):
-        logger.error("Eerror Decoding token", exc_info=True)
+        logger.error("Error Decoding token", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",

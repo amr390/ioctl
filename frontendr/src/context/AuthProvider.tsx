@@ -1,11 +1,11 @@
 import { IToken, IUser } from '@models'
-import { createContext, Dispatch, ReactNode, useState } from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react'
 
 type AuthState = {
   auth: IToken,
-  setAuth: Dispatch<IToken>
+  setAuth: Dispatch<SetStateAction<IToken>>
   profile: IUser
-  setProfile: Dispatch<IUser>
+  setProfile: Dispatch<SetStateAction<IUser>>
 }
 
 interface IProps {
