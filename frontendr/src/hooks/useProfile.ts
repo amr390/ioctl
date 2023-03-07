@@ -1,4 +1,4 @@
-import AuthContext from '@context/AuthProvider'
+import SettingsContext from '@context/SettingsProvider'
 import { IUser } from '@models'
 import { API_ROUTES } from '@utils/constants'
 import { AxiosResponse } from 'axios'
@@ -7,7 +7,7 @@ import useAxiosPrivate from './useAxiosPrivate'
 
 export const useProfile = () => {
   const axiosPrivate = useAxiosPrivate()
-  const { profile, setProfile } = useContext(AuthContext)
+  const { profile, setProfile } = useContext(SettingsContext)
 
   useEffect(() => {
     const controller = new AbortController()
