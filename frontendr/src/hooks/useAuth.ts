@@ -1,9 +1,9 @@
 import { useContext, useDebugValue } from 'react'
-import AuthContext from '@context/AuthProvider'
+import SettingsContext from '@context/SettingsProvider'
 
 export const useAuth = () => {
-  const { auth } = useContext(AuthContext)
+  const { auth } = useContext(SettingsContext)
   useDebugValue(auth, (auth) => (auth ? 'loggedIn' : 'Not loggedIn'))
 
-  return useContext(AuthContext)
+  return useContext(SettingsContext)
 }

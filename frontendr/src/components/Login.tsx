@@ -1,4 +1,4 @@
-import AuthContext from '@context/AuthProvider'
+import SettingsContext from '@context/SettingsProvider'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import { API_ROUTES } from '@utils/constants'
 import Image from 'next/image'
@@ -174,7 +174,7 @@ const Login = (props: { setLoggin: Dispatch<boolean> }) => {
   const [password, setPassword] = useState<string>('')
 
   const router = useRouter()
-  const { setAuth } = useContext(AuthContext)
+  const { setAuth } = useContext(SettingsContext)
 
   const axiosPrivate = useAxiosPrivate()
   const handleLogin = async () => {
