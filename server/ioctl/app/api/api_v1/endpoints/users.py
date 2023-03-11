@@ -183,8 +183,12 @@ def activate_user(
         raise user_not_exists
     if user.is_active:
         raise user_already_exists
-    organization = crud.organization.create_default(db=db, owner_uid=user.id)
-    crud.team.create_default(db=db, org_id=organization.id, user=user)
+    if user.hunter == 'SOLO':
+        organization = crud.organization.create_default(db=db, owner_uid=user.id)
+        crud.squad.create_default(db=db, org_id=organization.id, user=user)
+        crud.mission.
+
+
     user: models.User = crud.user.activate(db, user_id, token)
     return user
 

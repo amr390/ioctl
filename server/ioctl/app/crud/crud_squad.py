@@ -1,9 +1,8 @@
-import uuid
 from typing import Any, Dict, Optional, Union
-from pydantic import EmailStr
+# from pydantic import EmailStr
 from sqlalchemy.orm import Session
 
-from app.core.security import get_password_hash, verify_password
+# from app.core.security import get_password_hash, verify_password
 from app.crud.base import CRUDBase
 from app.models.squad import Squad
 from app.models.user import User
