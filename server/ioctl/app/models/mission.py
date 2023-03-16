@@ -7,14 +7,16 @@ from sqlalchemy.schema import Table
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
-    from .hunter import Hunter # noqa: 401
+    from .hunter import Hunter  # noqa: 401
 
-mission_hunters_table = Table (
+mission_hunters_table = Table(
     "mission_hunters",
     Base.metadata,
     Column("hunter_id", ForeignKey("hunter.id")),
     Column("mission_id", ForeignKey("mission.id")),
 )
+
+
 class Mission(Base):
     __tablename__ = "mission"
 
