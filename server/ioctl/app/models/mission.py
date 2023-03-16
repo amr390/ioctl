@@ -16,6 +16,8 @@ mission_hunters_table = Table (
     Column("mission_id", ForeignKey("mission.id")),
 )
 class Mission(Base):
+    __tablename__ = "mission"
+
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
     description = Column(String)

@@ -1,16 +1,17 @@
 from sqlalchemy import Boolean, Column, Integer, String, ForeignKey, VARCHAR
 from sqlalchemy.schema import Table
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from uvicorn.config import logging
 
 from app.db.base_class import Base
 
 # this should be if from typing import TYPE_CHECKING but it turns out is null
-import typing
+from typing import Optional
 
 # if typing.TYPE_CHECKING:
 from .role import Role  # noqa: F401
-from .hunter import Hunter # noqa: F401
+from .hunter import Hunter  # noqa: F401
+
 # from .squad import Squad
 
 
@@ -26,15 +27,16 @@ user_roles_table = Table(
 )
 
 
-
 class User(Base):
-    id = Column(Integer, primary_key=True, index=True)
-    full_name = Column(String, index=True)
-    email = Column(String, unique=True, index=True, nullable=False)
-    hashed_password = Column(String, nullable=False)
-    is_active = Column(Boolean(), default=True)
-    is_superuser = Column(Boolean(), default=False)
-    token = Column(VARCHAR(255), index=True)
-    hunter = Column(VARCHAR(63), default='SOLO')
+    __tablename__ = "user"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    full_name: Mapped[str] = mapped_column(index=True)
+    email: Mapped[str] = mapped_column(unique=True, index=True)
+    hashed_password: Mapped[str]
+    is_active: Mapped[bool] = mapped_column(default=True)
+    is_superuser: Mapped[bool] = mapped_column(default=False)
+    token: Mapped[Optional[str]] = mapped_column(String(255))
+    hunter: Mapped[str] = mapped_column(String(63), default="SOLO")
     profile = relationship("Hunter", back_populates="credentials")
     roles = relationship("Role", secondary=user_roles_table)
