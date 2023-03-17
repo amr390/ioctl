@@ -4,6 +4,7 @@ from app.db.base_class import Base
 
 
 class RefreshToken(Base):
+    __tablename__ = "refresh_token"
     id = Column(VARCHAR(255), primary_key=True, index=True)
     user_id = Column(Integer, index=True)
     validity_timestamp = Column(BigInteger, index=True)

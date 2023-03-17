@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
-    from .user import User # noqa: 401
+    from .user import User  # noqa: 401
 
 hunter_squads_table = Table(
     "hunter_squads",
@@ -18,6 +18,8 @@ hunter_squads_table = Table(
 
 
 class Squad(Base):
+    __tablename__ = "squad"
+
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     description = Column(String)

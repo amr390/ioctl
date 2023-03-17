@@ -10,6 +10,7 @@ if TYPE_CHECKING:
 
 
 class Clan(Base):
+    __tablename__ = "clan"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     description = Column(String)
