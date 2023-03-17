@@ -7,6 +7,7 @@ from pydantic import BaseModel, EmailStr
 class SquadBase(BaseModel):
     name: Optional[EmailStr] = None
     description: Optional[str] = None
+    leader_id: Optional[int] = None
 
     clan_id: Optional[int] = None
 
@@ -14,6 +15,8 @@ class SquadBase(BaseModel):
 # Properties to receive via API on creation
 class SquadCreate(SquadBase):
     name: str
+    description: Optional[str] = None
+    leader_id: int
     clan_id: int
 
 
@@ -25,6 +28,8 @@ class SquadUpdate(SquadBase):
 class SquadInDBBase(SquadBase):
     id: int
     name: str
+    description: Optional[str] = None
+    leader_id: int
     clan_id: int
 
     class Config:
