@@ -1,13 +1,14 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
-from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.schema import Table
 
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
     from .hunter import Hunter  # noqa: 401
+    from .user import User# noqa: 401
 
 mission_hunters_table = Table(
     "mission_hunters",
@@ -20,11 +21,11 @@ mission_hunters_table = Table(
 class Mission(Base):
     __tablename__ = "mission"
 
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String)
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    title: Mapped[Optional[str]] = mapped_column(index=True)
+    description: Mapped[Optional[str]] 
     # TODO: this might need to be moved to its own entity model.
-    realm = Column(String)
-    mission_leader = Column(Integer, ForeignKey("user.id"))
-    hunters = relationship("Hunter", secondary=mission_hunters_table)
-    # owner = relationship("User", back_populates="items")
+    realm: Mapped[Optional[str]]
+    leader_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    hunters: Mapped["Hunter"] = relationship(secondary=mission_hunters_table)
+    leader: Mapped["User"] = relationship()

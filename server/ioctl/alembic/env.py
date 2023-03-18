@@ -31,6 +31,7 @@ from app.models.hunter import Hunter
 from app.models.squad import Squad
 from app.models.mission import Mission
 from app.models.clan import Clan
+from app.models.token import RefreshToken
 
 target_metadata = Base.metadata
 
