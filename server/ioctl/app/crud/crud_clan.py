@@ -20,7 +20,7 @@ class CRUDClan(CRUDBase[Clan, ClanCreate, ClanUpdate]):
         db_obj = Clan(
             name=obj_in.name,
             description=obj_in.description,
-            owner=obj_in.owner_uid,
+            owner_id=obj_in.owner_uid,
         )
         db.add(db_obj)
         db.commit()

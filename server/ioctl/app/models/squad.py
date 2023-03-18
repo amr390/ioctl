@@ -24,6 +24,6 @@ class Squad(Base):
     name = Column(String, index=True)
     description = Column(String)
     clan = Column(Integer, ForeignKey("clan.id"))
-    hunters = relationship('User', secondary=hunter_squads_table, backref="users")
+    hunters = relationship("User", secondary=hunter_squads_table, backref="users")
 
     leader = Column(Integer, ForeignKey("user.id"))

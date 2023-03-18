@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any, List, Optional
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Security
 from fastapi.security import SecurityScopes
@@ -178,14 +178,16 @@ def activate_user(
     user_id: int,
     token: str,
 ) -> Any:
-    user: models.User | None = crud.user.get(db=db, id=user_id)
+    __import__('pdb').set_trace()
+
+    user: Optional[models.User] = crud.user.get(db=db, id=user_id)
     if not user:
         raise user_not_exists
     if user.is_active:
         raise user_already_exists
     if user.hunter == 'SOLO':
-        organization = crud.organization.create_default(db=db, owner_uid=user.id)
-        squad = crud.squad.create_default(db=db, org_id=organization.id, user=user)
+        clan = crud.clan.create_default(db=db, owner_uid=user.id)
+        squad = crud.squad.create_default(db=db, org_id=clan.id, user=user)
         crud.mission.create_default(db=db, squad_id=squad.id, user=user)
 
 
