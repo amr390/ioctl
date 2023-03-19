@@ -1,7 +1,9 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.schema import Table
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
@@ -20,8 +22,8 @@ hunter_squads_table = Table(
 class Squad(Base):
     __tablename__ = "squad"
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    name: Mapped[Optional[str]] = Column(String, index=True)
     description = Column(String)
     clan = Column(Integer, ForeignKey("clan.id"))
     hunters = relationship("User", secondary=hunter_squads_table, backref="users")

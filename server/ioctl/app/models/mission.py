@@ -8,7 +8,7 @@ from app.db.base_class import Base
 
 if TYPE_CHECKING:
     from .hunter import Hunter  # noqa: 401
-    from .user import User# noqa: 401
+    from .user import User  # noqa: 401
 
 mission_hunters_table = Table(
     "mission_hunters",
@@ -23,7 +23,7 @@ class Mission(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     title: Mapped[Optional[str]] = mapped_column(index=True)
-    description: Mapped[Optional[str]] 
+    description: Mapped[Optional[str]]
     # TODO: this might need to be moved to its own entity model.
     realm: Mapped[Optional[str]]
     leader_id: Mapped[int] = mapped_column(ForeignKey("user.id"))

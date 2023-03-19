@@ -1,6 +1,6 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
-from sqlalchemy import Boolean, Column, Integer, String, ForeignKey
+from sqlalchemy import Boolean, mapped_column, Integer, String, ForeignKey
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 class Hunter(Base):
     __tablename__ = "hunter"
 
-    id = Column(Integer, primary_key=True, index=True)
-    first_name = Column(String, index=True)
-    last_name = Column(String, index=True)
-    email = Column(String, index=True)
-    phone = Column(String)
-    user_id: Mapped[int] = Column(Integer, ForeignKey("user.id"))
-    credentials = relationship("User", back_populates="profile")
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    first_name: Mapped[Optional[str]] = mapped_column(index=True)
+    last_name: Mapped[Optional[str]]
+    email: Mapped[str] = mapped_column(index=True)
+    phone: Mapped[Optional[str]]
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    credentials: Mapped["User"] = relationship(back_populates="profile")
