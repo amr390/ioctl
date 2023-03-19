@@ -8,4 +8,4 @@ class RefreshToken(Base):
     __tablename__ = "refresh_token"
     id: Mapped[str] = mapped_column(primary_key=True, index=True)
     user_id: Mapped[int]
-    validity_timestamp: Mapped[BigInteger] = mapped_column
+    validity_timestamp = mapped_column(BigInteger)

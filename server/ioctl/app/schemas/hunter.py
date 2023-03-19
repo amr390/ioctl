@@ -5,13 +5,17 @@ from pydantic import BaseModel
 
 # shared Properties
 class HunterBase(BaseModel):
-    title: Optional[str] = None
-    description: Optional[str] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    email: str
+    phone: str
+    user_id: int
 
 
 # Properties to receive on hunter creation
 class HunterCreate(HunterBase):
-    title: str
+    first_name: str
+    email: str
 
 
 # Properties to reeive on hunter update
@@ -22,8 +26,8 @@ class HunterUpdate(HunterBase):
 # Properties shared by models stored in DB
 class HunterInDBBase(HunterBase):
     id: int
-    title: str
-    owner_uid: int
+    first_name: str
+    email: str
 
     class Config:
         orm_mode = True

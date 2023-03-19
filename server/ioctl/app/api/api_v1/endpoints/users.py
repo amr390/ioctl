@@ -107,6 +107,8 @@ def update_user_me(
     """
     current_user_data = jsonable_encoder(current_user)
     user_in = schemas.UserUpdate(**current_user_data)
+    hunter_in = schemas.HunterUpdate(**current_user_data)
+
     if password is not None:
         user_in.password = password
     if full_name is not None:
@@ -116,7 +118,10 @@ def update_user_me(
     if hunter is not None:
         user_in.hunter = hunter
 
+    __import__('pdb').set_trace()
+
     user = crud.user.update(db, db_obj=current_user, obj_in=user_in)
+    hunter = crud.hunter.update(db, db_obj=user.profile, obj_in = hunter_in)
     return user
 
 

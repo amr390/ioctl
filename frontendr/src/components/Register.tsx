@@ -9,7 +9,8 @@ import { useRouter } from 'next/router'
 
 const credentials = {
   email: '',
-  full_name: '',
+  first_name: '',
+  last_name: '',
   password: '',
   repassword: '',
   hunterType: '',
@@ -173,9 +174,19 @@ const InputFields = () => {
         <input
           type='text'
           className='form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
-          id='full-name'
-          placeholder='Full name'
-          onChange={(e) => (credentials.full_name = e.target.value)}
+          id='first-name'
+          placeholder='First Name'
+          onChange={(e) => (credentials.first_name = e.target.value)}
+        />
+      </div>
+
+<div className='mb-6'>
+        <input
+          type='text'
+          className='form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
+          id='last-name'
+          placeholder='Last Name'
+          onChange={(e) => (credentials.last_name = e.target.value)}
         />
       </div>
 

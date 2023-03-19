@@ -5,5 +5,5 @@ from .role import Role, RoleCreate, RoleUpdate
 from .user import User, UserCreate, UserInDB, UserUpdate
 from .clan import Clan, ClanCreate, ClanInDB, ClanUpdate
 from .hunter import Hunter, HunterCreate, HunterInDB, HunterUpdate
-
+# Missing Mission Squad and Quest
 

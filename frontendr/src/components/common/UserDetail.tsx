@@ -13,7 +13,7 @@ export const UserDetail = () => {
       <div className='flex relative top-[-10px] w-full h-16 justify-center'>
         <div className='flex flex-row justify-between items-center px-1 border rounded-md w-11/12 bg-black text-white text-center'>
           <span className='text-white text-sm pl-2'>
-            {profile ? `${profile.full_name}` : 'Status'}
+            {profile ? `${profile.first_name}` : 'Status'}
           </span>
           <span className={style}>
             {auth.access_token ? 'LOGOUT' : 'SIGN IN'}

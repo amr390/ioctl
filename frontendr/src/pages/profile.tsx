@@ -73,11 +73,24 @@ export default function Profile() {
               Name
             </label>
             <input
-              id='full_name'
+              id='first_name'
               type='text'
               className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
-              placeholder='Full Name'
-              value={profile.full_name || ''}
+              placeholder='First Name'
+              value={profile.first_name || ''}
+              onChange={handleChange}
+            />
+          </div>
+          <div className='flex flex-row gap-4 md:gap-16 w-full md:w-10/12'>
+            <label className='w-24' htmlFor='name'>
+              Last Name
+            </label>
+            <input
+              id='last_name'
+              type='text'
+              className='focus:outline-none border-b w-full pb-2 border-gray-400 placeholder-gray-500 mb-8'
+              placeholder='Last Name'
+              value={profile.last_name || ''}
               onChange={handleChange}
             />
           </div>
