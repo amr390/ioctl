@@ -7,13 +7,12 @@ from sqlalchemy.schema import Table
 from app.db.base_class import Base
 
 if TYPE_CHECKING:
-    from .hunter import Hunter  # noqa: 401
     from .user import User  # noqa: 401
 
 mission_hunters_table = Table(
     "mission_hunters",
     Base.metadata,
-    Column("hunter_id", ForeignKey("hunter.id")),
+    Column("user_id", ForeignKey("user.id")),
     Column("mission_id", ForeignKey("mission.id")),
 )
 
@@ -27,5 +26,4 @@ class Mission(Base):
     # TODO: this might need to be moved to its own entity model.
     realm: Mapped[Optional[str]]
     leader_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
-    hunters: Mapped["Hunter"] = relationship(secondary=mission_hunters_table)
-    leader: Mapped["User"] = relationship()
+    hunters: Mapped["User"] = relationship(secondary=mission_hunters_table)

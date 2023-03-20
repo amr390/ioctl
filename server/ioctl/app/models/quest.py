@@ -11,29 +11,19 @@ from app.db.base_class import Base
 if TYPE_CHECKING:
     from .user import User  # noqa: 401
 
-hunter_squads_table = Table(
-    "hunter_squads",
+quest_hunters_table = Table(
+    "quest_hunters",
     Base.metadata,
     Column("user_id", ForeignKey("user.id")),
-    Column("squad_id", ForeignKey("squad.id")),
-)
-
-squad_missions_table = Table(
-    "squad_missions",
-    Base.metadata,
-    Column("squad_id", ForeignKey("squad.id")),
-    Column("mission_id", ForeignKey("mission.id")),
+    Column("quest_id", ForeignKey("quest.id")),
 )
 
 
-class Squad(Base):
+class Quest(Base):
     __tablename__ = "squad"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     name: Mapped[Optional[str]] = Column(String, index=True)
     description = Column(String)
-    clan = Column(Integer, ForeignKey("clan.id"))
-    hunters = relationship("User", secondary=hunter_squads_table, backref="users")
-    missions = relationship("Mission", secondary=hunter_squads_table, backref="squad")
-
-    leader = Column(Integer, ForeignKey("user.id"))
+    mission = Column(Integer, ForeignKey("mission.id"))
+    hunters: Mapped["User"] = relationship(secondary=quest_hunters_table)
