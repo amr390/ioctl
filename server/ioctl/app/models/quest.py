@@ -21,11 +21,11 @@ quest_hunters_table = Table(
 
 
 class Quest(Base):
-    __tablename__ = "squad"
+    __tablename__ = "quest"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     name: Mapped[str]
     description: Mapped[Optional[str]]
     mission_id: Mapped[int] = mapped_column(ForeignKey("mission.id"))
-    mission: Mapped["Mission"] = relationship(back_populates="quests")
+    mission: Mapped["Mission"] = relationship(backref="quests")
     hunters: Mapped["User"] = relationship(secondary=quest_hunters_table)

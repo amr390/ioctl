@@ -29,6 +29,7 @@ from app.db.base import Base  # noqa
 from app.models.user import User
 from app.models.hunter import Hunter
 from app.models.squad import Squad
+from app.models.quest import Quest
 from app.models.mission import Mission
 from app.models.clan import Clan
 from app.models.token import RefreshToken
