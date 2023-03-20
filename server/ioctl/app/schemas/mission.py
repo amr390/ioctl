@@ -5,14 +5,14 @@ from pydantic import BaseModel, EmailStr
 
 # Shared Properties
 class MissionBase(BaseModel):
-    name: Optional[EmailStr] = None
+    title: Optional[EmailStr] = None
     description: Optional[bool] = False
 
 
 # Properties to receive via API on creation
 class MissionCreate(MissionBase):
-    name: str
-    squad_id: int
+    title: str
+    leader_id: int
 
 
 # Properties to receive via API on update
@@ -22,8 +22,9 @@ class MissionUpdate(MissionBase):
 
 class MissionInDBBase(MissionBase):
     id: int
-    name: str
+    title: str
     squad_id: int
+    leader_id: int
 
     class Config:
         orm_mode = True

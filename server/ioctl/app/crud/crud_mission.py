@@ -1,5 +1,9 @@
+from typing import Optional
+from sqlalchemy.orm import Session
 from app.crud.base import CRUDBase
 from app.models.mission import Mission
+from app.models.squad import Squad
+from app.models.user import User
 from app.schemas.mission import MissionCreate, MissionUpdate
 
 
@@ -12,20 +16,33 @@ class CRUDMission(CRUDBase[Mission, MissionCreate, MissionUpdate]):
 
     def create(self, db: Session, *, obj_in: MissionCreate) -> Mission:
         db_obj = Mission(
-            name=obj_in.name,
-            description = obj_in.description,
-            squad_id=obj_in.squad_id
+            title=obj_in.title,
+            description=obj_in.description,
+            leader_id=obj_in.leader_id,
         )
         db.add(db_obj)
         db.commit()
-        db.refresh()
+        db.refresh(db_obj)
         return db_obj
 
-    def create_default(self, db: Session, *, squad_id: int, user: User) -> Mission:
-        db_obj = MissionCreate(
-            name=obj_in.name,
-            description=obj_in.description,
-            squad_id=obj_in.squad_id
-
+    def create_default(self, db: Session, *, squad: Squad, user: User) -> Mission:
+        obj_in = MissionCreate(
+            title="Default Mission",
+            leader_id=user.id,
         )
-        
+        mission = self.create(db=db, obj_in=obj_in)
+        self.add_squads(db=db, mission=mission, squad=squad)
+        return mission
+
+
+    def add_squads(self, db: Session, *, mission: Mission, squad: Squad) -> Mission:
+        mission.squads.append(squad)
+        db.add(mission)
+        db.commit()
+        db.refresh(mission)
+
+        return mission
+    
+
+
+mission = CRUDMission(Mission)

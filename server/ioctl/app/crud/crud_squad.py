@@ -1,4 +1,5 @@
 from typing import Any, Dict, Optional, Union
+
 # from pydantic import EmailStr
 from sqlalchemy.orm import Session
 
@@ -20,21 +21,25 @@ class CRUDSquad(CRUDBase[Squad, SquadCreate, SquadUpdate]):
         db_obj = Squad(
             name=obj_in.name,
             description=obj_in.description,
-            clan=obj_in.clan_id,
+            clan_id=obj_in.clan_id,
+            leader_id=obj_in.leader_id,
         )
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
         return db_obj
 
-    def create_default(self, db: Session, *, org_id: int, user: User) -> Squad:
-        org: SquadCreate = SquadCreate(
+    def create_default(self, db: Session, *, clan_id: int, user: User) -> Squad:
+        obj_in: SquadCreate = SquadCreate(
             name="default",
             description="Solo Hunter default Squad.",
-            clan_id=org_id,
+            clan_id=clan_id,
+            leader_id=user.id,
         )
-        team = self.create(db=db, obj_in=org)
-        self.add_user(db=db, db_obj=team, user=user)
+        squad = self.create(db=db, obj_in=obj_in)
+        self.add_user(db=db, db_obj=squad, user=user)
+
+        return squad
 
     def update(
         self, db: Session, *, db_obj: Squad, obj_in: Union[SquadUpdate, Dict[str, Any]]
@@ -46,7 +51,7 @@ class CRUDSquad(CRUDBase[Squad, SquadCreate, SquadUpdate]):
         return super().update(db, db_obj=db_obj, obj_in=update_data)
 
     def add_user(self, db: Session, *, db_obj: Squad, user: User) -> Squad:
-        db_obj.users.append(user)
+        db_obj.hunters.append(user)
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)

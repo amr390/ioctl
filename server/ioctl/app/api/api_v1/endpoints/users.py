@@ -1,7 +1,6 @@
 from typing import Any, List, Optional
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Security
-from fastapi.security import SecurityScopes
 from fastapi.encoders import jsonable_encoder
 from pydantic.networks import EmailStr
 from sqlalchemy.orm import Session
@@ -183,7 +182,6 @@ def activate_user(
     user_id: int,
     token: str,
 ) -> Any:
-    __import__('pdb').set_trace()
 
     user: Optional[models.User] = crud.user.get(db=db, id=user_id)
     if not user:
@@ -192,8 +190,8 @@ def activate_user(
         raise user_already_exists
     if user.hunter == 'SOLO':
         clan = crud.clan.create_default(db=db, owner_uid=user.id)
-        squad = crud.squad.create_default(db=db, org_id=clan.id, user=user)
-        crud.mission.create_default(db=db, squad_id=squad.id, user=user)
+        squad = crud.squad.create_default(db=db, clan_id=clan.id, user=user)
+        crud.mission.create_default(db=db, squad=squad, user=user)
 
 
     user: models.User = crud.user.activate(db, user_id, token)

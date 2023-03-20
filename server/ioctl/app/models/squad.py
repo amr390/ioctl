@@ -34,9 +34,9 @@ class Squad(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     name: Mapped[Optional[str]]
     description: Mapped[Optional[str]]
-    clan_int: Mapped[int] = mapped_column(ForeignKey("clan.id"))
+    clan_id: Mapped[int] = mapped_column(ForeignKey("clan.id"))
     clan: Mapped["Clan"] = relationship("Clan", backref="squads")
-    hunters: Mapped[List["User"]] = relationship("User", secondary=hunter_squads_table, backref="squads")
     missions: Mapped[List["Mission"]] = relationship("Mission", secondary=squad_missions_table, backref="squads")
+    hunters: Mapped[List["User"]] = relationship("User", secondary=hunter_squads_table, backref="squads")
     leader_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
-    leader : Mapped["User"] = relationship("User")
+    leader: Mapped["User"] = relationship("User")

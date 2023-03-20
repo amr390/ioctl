@@ -3,6 +3,7 @@ from .crud_role import role
 from .crud_hunter import hunter
 from .crud_token import token
 from .crud_clan import clan
+from .crud_mission import mission 
 from .crud_squad import squad
 
 # For a new basic set of CRUD operations you could just do
