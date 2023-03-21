@@ -8,11 +8,14 @@ from app.schemas.mission import MissionCreate, MissionUpdate
 
 
 class CRUDMission(CRUDBase[Mission, MissionCreate, MissionUpdate]):
-    def get_by_name(self, db: Session, *, name: str) -> Optional[Mission]:
-        return db.query(Mission).filter(Mission.name == name).first()
-
     def get(self, db: Session, *, id: int) -> Optional[Mission]:
         return db.query(Mission).filter(Mission.id == id).one()
+
+    def get_by_user(self, db: Session, *, leader_id: int) -> Optional[Mission]:
+        return db.query(Mission).filter(Mission.leader_id == leader_id).first()
+
+    def get_by_name(self, db: Session, *, name: str) -> Optional[Mission]:
+        return db.query(Mission).filter(Mission.name == name).first()
 
     def create(self, db: Session, *, obj_in: MissionCreate) -> Mission:
         db_obj = Mission(

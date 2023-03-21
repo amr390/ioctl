@@ -189,10 +189,16 @@ def activate_user(
     if user.is_active:
         raise user_already_exists
     if user.hunter == 'SOLO':
-        clan = crud.clan.create_default(db=db, owner_uid=user.id)
-        squad = crud.squad.create_default(db=db, clan_id=clan.id, user=user)
-        crud.mission.create_default(db=db, squad=squad, user=user)
+        clan = crud.clan.get_by_user(db=db, owner_id=user.id)
+        if not clan:
+            clan = crud.clan.create_default(db=db, owner_id=user.id)
 
+        squad = crud.squad.get_by_user(db=db, leader_id=user.id)
+        if not squad:
+            squad = crud.squad.create_default(db=db, clan_id=clan.id, user=user)
+        mission = crud.mission.get_by_user(db=db, leader_id=user.id)
+        if not mission:
+            crud.mission.create_default(db=db, squad=squad, user=user)
 
     user: models.User = crud.user.activate(db, user_id, token)
     return user

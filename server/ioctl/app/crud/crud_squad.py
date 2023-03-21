@@ -11,11 +11,15 @@ from app.schemas.squad import SquadCreate, SquadUpdate
 
 
 class CRUDSquad(CRUDBase[Squad, SquadCreate, SquadUpdate]):
-    def get_by_name(self, db: Session, *, name: str) -> Optional[Squad]:
-        return db.query(Squad).filter(Squad.name == name).first()
 
     def get(self, db: Session, *, id: int) -> Optional[Squad]:
         return db.query(Squad).filter(Squad.id == id).one()
+
+    def get_by_user(self, db: Session, *, leader_id: int) -> Optional[Squad]:
+        return db.query(Squad).filter(Squad.leader_id == leader_id).first()
+
+    def get_by_name(self, db: Session, *, name: str) -> Optional[Squad]:
+        return db.query(Squad).filter(Squad.name == name).first()
 
     def create(self, db: Session, *, obj_in: SquadCreate) -> Squad:
         db_obj = Squad(
