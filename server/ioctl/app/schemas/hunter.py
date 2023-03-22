@@ -5,11 +5,11 @@ from pydantic import BaseModel
 
 # shared Properties
 class HunterBase(BaseModel):
+    user_id: int
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     email: str
-    phone: str
-    user_id: int
+    phone: Optional[str] = None
 
 
 # Properties to receive on hunter creation

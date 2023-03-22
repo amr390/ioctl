@@ -105,6 +105,8 @@ def update_user_me(
     Update own user.
     """
     current_user_data = jsonable_encoder(current_user)
+    # add this entry to the dictionary to use HunterUpdate schema
+    current_user_data["user_id"] = current_user_data["id"] 
     user_in = schemas.UserUpdate(**current_user_data)
     hunter_in = schemas.HunterUpdate(**current_user_data)
 
@@ -116,8 +118,6 @@ def update_user_me(
         user_in.email = email
     if hunter is not None:
         user_in.hunter = hunter
-
-    __import__('pdb').set_trace()
 
     user = crud.user.update(db, db_obj=current_user, obj_in=user_in)
     hunter = crud.hunter.update(db, db_obj=user.profile, obj_in = hunter_in)
