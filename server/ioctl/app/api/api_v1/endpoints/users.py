@@ -93,8 +93,10 @@ def update_user_me(
     *,
     db: Session = Depends(deps.get_db),
     password: str = Body(None),
-    full_name: str = Body(None),
+    first_name: str = Body(None),
+    last_name: str = Body(None),
     email: EmailStr = Body(None),
+    phone: str = Body(None),
     hunter: str = Body(None),
     current_user: models.User = Security(
         deps.get_current_active_user,
@@ -106,21 +108,30 @@ def update_user_me(
     """
     current_user_data = jsonable_encoder(current_user)
     # add this entry to the dictionary to use HunterUpdate schema
-    current_user_data["user_id"] = current_user_data["id"] 
+    current_user_data["user_id"] = current_user_data["id"]
     user_in = schemas.UserUpdate(**current_user_data)
     hunter_in = schemas.HunterUpdate(**current_user_data)
 
     if password is not None:
         user_in.password = password
-    if full_name is not None:
-        user_in.full_name = full_name
-    if email is not None:
-        user_in.email = email
     if hunter is not None:
         user_in.hunter = hunter
+    if email is not None:
+        user_in.email = email
+        hunter_in.email = email
+    if phone is not None:
+        hunter_in.phone = phone
+    if first_name is not None:
+        hunter_in.first_name = first_name
+    if last_name is not None:
+        hunter_in.last_name = last_name
 
     user = crud.user.update(db, db_obj=current_user, obj_in=user_in)
-    hunter = crud.hunter.update(db, db_obj=user.profile, obj_in = hunter_in)
+    if user.profile:
+        crud.hunter.update(db, db_obj=user.profile, obj_in=hunter_in)
+    else:
+        crud.hunter.create(db, obj_in=hunter_in, user_id=user.id)
+
     return user
 
 
@@ -130,7 +141,7 @@ def read_user_me(
     current_user: models.User = Security(
         deps.get_current_active_user,
         scopes=[
-            RoleChecker.HEAD["name"],
+            RoleChecker.PLAYER["name"],
         ],
     ),
 ) -> Any:
@@ -188,7 +199,7 @@ def activate_user(
         raise user_not_exists
     if user.is_active:
         raise user_already_exists
-    if user.hunter == 'SOLO':
+    if user.hunter == "SOLO":
         clan = crud.clan.get_by_user(db=db, owner_id=user.id)
         if not clan:
             clan = crud.clan.create_default(db=db, owner_id=user.id)
@@ -196,6 +207,7 @@ def activate_user(
         squad = crud.squad.get_by_user(db=db, leader_id=user.id)
         if not squad:
             squad = crud.squad.create_default(db=db, clan_id=clan.id, user=user)
+
         mission = crud.mission.get_by_user(db=db, leader_id=user.id)
         if not mission:
             crud.mission.create_default(db=db, squad=squad, user=user)

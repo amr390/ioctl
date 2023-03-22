@@ -13,7 +13,7 @@ class CRUDClan(CRUDBase[Clan, ClanCreate, ClanUpdate]):
         return db.query(Clan).filter(Clan.id == id).one()
 
     def get_by_user(self, db: Session, *, owner_id: int) -> Optional[Clan]:
-        return db.query(Clan).filter(clan.owner_id == user_id).first()
+        return db.query(Clan).filter(Clan.owner_id == owner_id).first()
 
     def get_by_name(self, db: Session, *, name: str) -> Optional[Clan]:
         return db.query(Clan).filter(Clan.name == name).first()

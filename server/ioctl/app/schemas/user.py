@@ -8,7 +8,6 @@ class UserBase(BaseModel):
     email: Optional[EmailStr] = None
     is_active: Optional[bool] = False
     is_superuser: bool = False
-    full_name: Optional[str] = None
     hunter: Optional[str] = None
 
 

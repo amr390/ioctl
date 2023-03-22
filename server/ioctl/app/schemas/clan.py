@@ -8,13 +8,13 @@ class ClanBase(BaseModel):
     name: Optional[EmailStr] = None
     description: Optional[str] = None
 
-    owner_uid: Optional[int] = None
+    owner_id: Optional[int] = None
 
 
 # Properties to receive via API on creation
 class ClanCreate(ClanBase):
     name: str
-    owner_uid: int
+    owner_id: int
 
 
 # Properties to receive via API on update
@@ -25,7 +25,7 @@ class ClanUpdate(ClanBase):
 class ClanInDBBase(ClanBase):
     id: int
     name: str
-    owner_uid: int
+    owner_id: int
 
     class Config:
         orm_mode = True

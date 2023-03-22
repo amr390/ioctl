@@ -199,7 +199,8 @@ const Login = (props: { setLoggin: Dispatch<boolean> }) => {
         router.replace('/users')
       }
     } catch (err) {
-      toast.error(`Failed to authenticate: ${err}`)
+      console.log(err)
+      toast.error(`Failed to authenticate: ${err?.response?.data?.detail}`)
     }
   }
 
