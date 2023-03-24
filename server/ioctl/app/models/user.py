@@ -6,7 +6,7 @@ from uvicorn.config import logging
 from app.db.base_class import Base
 
 # this should be if from typing import TYPE_CHECKING but it turns out is null
-from typing import Optional
+from typing import List, Optional
 
 # if typing.TYPE_CHECKING:
 from .role import Role  # noqa: F401
@@ -37,5 +37,5 @@ class User(Base):
     is_superuser: Mapped[bool] = mapped_column(default=False)
     token: Mapped[Optional[str]] = mapped_column(String(255))
     hunter: Mapped[str] = mapped_column(String(63), default="SOLO")
-    profile = relationship("Hunter", back_populates="credentials")
-    roles = relationship("Role", secondary=user_roles_table)
+    profile: Mapped['Hunter'] = relationship("Hunter", back_populates="credentials")
+    roles: Mapped[List['Role']] = relationship("Role", secondary=user_roles_table)

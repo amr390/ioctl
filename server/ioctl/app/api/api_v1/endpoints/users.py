@@ -107,10 +107,10 @@ def update_user_me(
     Update own user.
     """
     current_user_data = jsonable_encoder(current_user)
+
     # add this entry to the dictionary to use HunterUpdate schema
     current_user_data["user_id"] = current_user_data["id"]
     user_in = schemas.UserUpdate(**current_user_data)
-    hunter_in = schemas.HunterUpdate(**current_user_data)
 
     if password is not None:
         user_in.password = password
@@ -118,18 +118,20 @@ def update_user_me(
         user_in.hunter = hunter
     if email is not None:
         user_in.email = email
-        hunter_in.email = email
+        current_user_data["email"] = email
     if phone is not None:
-        hunter_in.phone = phone
+        current_user_data["phone"] = phone
     if first_name is not None:
-        hunter_in.first_name = first_name
+        current_user_data["first_name"] = first_name
     if last_name is not None:
-        hunter_in.last_name = last_name
+        current_user_data["last_name"] = last_name
 
     user = crud.user.update(db, db_obj=current_user, obj_in=user_in)
     if user.profile:
+        hunter_in = schemas.HunterUpdate(**current_user_data)
         crud.hunter.update(db, db_obj=user.profile, obj_in=hunter_in)
     else:
+        hunter_in = schemas.HunterCreate(**current_user_data)
         crud.hunter.create(db, obj_in=hunter_in, user_id=user.id)
 
     return user

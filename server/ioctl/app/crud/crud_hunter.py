@@ -39,13 +39,7 @@ class CRUDHunter(CRUDBase[Hunter, HunterCreate, HunterUpdate]):
         return db_obj
 
     def update(self, db: Session, *, db_obj: Hunter, obj_in: HunterUpdate) -> Hunter:
-        if isinstance(obj_in, dict):
-            update_data = obj_in
-        else:
-            update_data = obj_in.dict(exclude_unset=True)
-
-        __import__("pdb").set_trace()
-        return super().update(db, db_obj=db_obj, obj_in=update_data)
+        return super().update(db, db_obj=db_obj, obj_in=obj_in)
 
 
 hunter = CRUDHunter(Hunter)
