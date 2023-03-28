@@ -37,6 +37,10 @@ class HunterInDBBase(HunterBase):
 class Hunter(HunterInDBBase):
     pass
 
+class HunterProfile(HunterInDBBase):
+    hunter: Optional[str]
+    
+
 
 # Properties stored in DB
 class HunterInDB(HunterInDBBase):

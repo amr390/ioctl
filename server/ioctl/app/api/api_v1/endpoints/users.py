@@ -32,7 +32,7 @@ def read_users(
     current_user: models.User = Security(
         deps.get_current_active_user,
         scopes=[
-            RoleChecker.HEAD["name"],
+            RoleChecker.PLAYER["name"],
         ],
     ),
 ) -> Any:
@@ -88,7 +88,7 @@ def create_user_open(
     return user
 
 
-@router.put("/me", response_model=schemas.User)
+@router.put("/me", response_model=schemas.HunterProfile)
 def update_user_me(
     *,
     db: Session = Depends(deps.get_db),
@@ -102,7 +102,7 @@ def update_user_me(
         deps.get_current_active_user,
         scopes=[],
     ),
-) -> Any:
+) -> schemas.HunterProfile:
     """
     Update own user.
     """
@@ -134,10 +134,13 @@ def update_user_me(
         hunter_in = schemas.HunterCreate(**current_user_data)
         crud.hunter.create(db, obj_in=hunter_in, user_id=user.id)
 
-    return user
+    hunter = schemas.HunterProfile(**user.profile.__dict__)
+    hunter.hunter = user.hunter
+
+    return hunter
 
 
-@router.get("/me", response_model=schemas.User)
+@router.get("/me", response_model=schemas.HunterProfile)
 def read_user_me(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Security(
@@ -146,11 +149,14 @@ def read_user_me(
             RoleChecker.PLAYER["name"],
         ],
     ),
-) -> Any:
+) -> schemas.HunterProfile:
     """
     Get current user.
     """
-    return current_user
+    hunter = schemas.HunterProfile(**current_user.profile.__dict__)
+    hunter.hunter = current_user.hunter
+
+    return hunter
 
 
 @router.get("/{user_id}", response_model=schemas.User)

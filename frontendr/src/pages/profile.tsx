@@ -1,11 +1,10 @@
-/* import { APP_ROUTES } from '@utils/constants' */
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import { useProfile } from '@hooks/useProfile'
 import { IUser } from '@models'
 import EditIcon from '@mui/icons-material/Edit'
 import UserApi from '@services/users'
-import { AxiosInstance, AxiosResponse } from 'axios'
-import { useEffect, useState } from 'react'
+import { AxiosInstance } from 'axios'
+import { useState } from 'react'
 
 export default function Profile() {
   const [validPassword, setValidPassword] = useState<boolean>(true)
@@ -28,30 +27,6 @@ export default function Profile() {
     const newProfile: IUser = await userApi.updateMe(axiosPrivate, profile)
     setProfile(newProfile)
   }
-
-  useEffect(() => {
-    const controller = new AbortController()
-
-    const getProfile = async () => {
-      try {
-        const response: AxiosResponse = await userApi.getMe(axiosPrivate, {
-          signal: controller.signal,
-        })
-        console.log('user profile: ', response.data)
-
-        setProfile(response.data)
-      } catch (err) {
-        console.error(err)
-      }
-    }
-
-    getProfile()
-
-    return () => {
-      controller.abort() // abort any on going requests
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const repasswordStyle = {
     success:

@@ -9,17 +9,6 @@ const IndexPage = () => {
   //TODO: replace by context
   const [me, setMe] = useState(null)
 
-  /* useEffect(() => { */
-  /*   fetchWrapper */
-  /*     .get(`${API_ROUTES.USER_ME_GET}/${userId}`) */
-  /*     .then((response) => response.json()) */
-  /*     .then((data) => { */
-  /*       setMe(data) */
-  /*       console.log('user is ', me, data) */
-  /*     }) */
-  /* }, [me, userId]) */
-
-  /* toast(authenticated ? `user is authenticated: ${userId}` : 'Not yet authenticated') */
   return (
     <>
       <section
