@@ -9,7 +9,7 @@ export const UserList = (props : IProps) => {
     <section>
       <ul>
       {props.userList.map(user => 
-        <li key={user.username}>{user.username}</li>
+        <li key={user.username}>{user.username} {user.is_active ? 'Active' : 'Not activated'}</li>
       )}
       </ul>
       

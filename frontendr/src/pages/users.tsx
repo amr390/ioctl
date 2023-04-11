@@ -19,7 +19,6 @@ export default function Users() {
         /* const response: AxiosResponse = await axiosPrivate.get(API_ROUTES.USER_CRUD, { */
         /*   signal: controller.signal, */
         /* }) */
-        console.log('user list: ', response.data)
 
         setUsers(response.data)
       } catch (err) {
@@ -39,7 +38,7 @@ export default function Users() {
       <h2>User list</h2>
       <article>
         {users?.length &&
-          users.map((user, idx) => <div key={idx}> {user.email}</div>)}
+          users.map((user, idx) => <div key={idx}> {user.email} {user.is_active? 'Active' : 'Not active'}</div>)}
       </article>
     </>
   )

@@ -12,8 +12,6 @@ const useRefreshToken = () => {
       API_ROUTES.SIGN_REFRESH
     )
     setAuth((prev: IToken) => {
-      console.log(JSON.stringify(prev))
-      console.log(response.data.access_token)
       return { ...prev, access_token: response.data.access_token }
     })
     return response.data
