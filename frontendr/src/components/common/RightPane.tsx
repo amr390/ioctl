@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 export const RightPane: React.FC = (props: {}) => {
   return (
-    <div className='flex flex-grow-1 flex-shrik h-screen w-fixed w-1/4 px-2 bg-white float-right justify-between'>
+    <div className='hidden bg-white float-right justify-between lg:flex lg:flex-grow-1 lg:flex-shrik lg:h-screen lg:w-fixed lg:w-1/4 lg:px-2 '>
       <div className='flex gap-5 w-full items-center p-4 sm:flex-col px-2'>
         <ChecksView />
         <MeetingsView />

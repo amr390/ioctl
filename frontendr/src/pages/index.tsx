@@ -6,8 +6,6 @@ import { useAuth } from '@hooks/useAuth'
 const IndexPage = () => {
   const auth = useAuth()
   const url = auth ? '/profile' : '/login'
-  //TODO: replace by context
-  const [me, setMe] = useState(null)
 
   return (
     <>
