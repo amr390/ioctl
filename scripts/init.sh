@@ -1,4 +1,4 @@
-#!/usr/bin/bash 
+#!/usr/bin/env bash
 
 echo "Installing initial schema from alembic"
 alembic upgrade head
